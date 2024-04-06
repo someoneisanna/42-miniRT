@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <pthread.h>
 #include "vec3.h"
 #include "color.h"
 #include "ray.h"
@@ -16,15 +17,16 @@ color ray_color(ray r, hittable *world, int world_size, int depth)
 	{
 		color attenuation;
 		ray scattered;
-		if (material_scatter(rec.material, r, &rec, &attenuation, &scattered))
-			return (vec3_mult_element_wise(attenuation, ray_color(scattered, world, world_size, depth - 1)));
+		color emitted = material_emit(rec.material);
+		if (!material_scatter(rec.material, r, &rec, &attenuation, &scattered))
+			return emitted;
+		else
+			return vec3_sum(emitted, vec3_mult_element_wise(attenuation, ray_color(scattered, world, world_size, depth - 1)));
 		return ((color) {0, 0, 0});
 	}
 	vec3 unit_direction = vec3_normalized(r.direction);
 	float t = 0.5 * (unit_direction.y + 1.0);
-	return (vec3_sum(
-		vec3_mult_scalar((color) {1.0, 1.0, 1.0}, 1.0 - t), 
-		vec3_mult_scalar((color) {0.5, 0.7, 1.0}, t)));
+	return (color) {0, 0, 0};
 }
 
 int main(int argc, char *argv[])
@@ -33,20 +35,21 @@ int main(int argc, char *argv[])
 	int width = 400;
 	int height = (int) (width/aspect_ratio);
 	int samples_per_pixel = 100;
-	int max_depth = 20;
+	int max_depth = 5;
 
-	int world_size = 4;
+	int world_size = 5;
 	hittable world[world_size];
 
-	lambertian l1 = create_lambertian((vec3) {0.8, 0.8, 0.0});
-	lambertian l2 = create_lambertian((vec3) {0.7, 0.3, 0.3});
-	metal m1 = create_metal((vec3) {0.8, 0.8, 0.8}, 0.3);
-	metal m2 = create_metal((vec3) {0.8, 0.6, 0.2}, 1.0);
+	material m_ground = (material) create_lambertian((vec3) {0.8, 0.8, 0.0});
+	material m_left = (material) create_dielectric(1.5);
+	material m_center = (material) create_diffuse_light((color) {1, 1, 1});
+	material m_right = (material) create_metal((vec3) {0.8, 0.3, 0.2}, 0);
 
-	world[0] = (hittable) create_sphere((point3) {0.0, -100.5, -1.0}, 100, (material*) &l1);
-	world[1] = (hittable) create_sphere((point3) {0.0, 0.0, -1.0}, 0.5, (material*) &l2);
-	world[2] = (hittable) create_sphere((point3) {1.0, 0.0, -1.0}, 0.5, (material*) &m1);
-	world[3] = (hittable) create_sphere((point3) {-1.0, 0.0, -1.0}, 0.5, (material*) &m2);
+	world[0] = (hittable) create_sphere((point3) {0.0, -100.5, -1.0}, 100, (material*) &m_ground);
+	world[1] = (hittable) create_sphere((point3) {0.0, 200.0, -1.0}, 100, (material*) &m_center);
+	world[2] = (hittable) create_sphere((point3) {1.0, 0.0, -1.0}, -0.3, (material*) &m_left);
+	world[3] = (hittable) create_sphere((point3) {-1.0, 0.0, -1.0}, 0.5, (material*) &m_left);
+	world[4] = (hittable) create_sphere((point3) {1.0, 0.0, -1.0}, 0.5, (material*) &m_right);
 
 	camera camera = create_default_camera();
 

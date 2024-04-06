@@ -74,6 +74,15 @@ int vec3_near_zero(vec3 vec)
 	return ((fabs(vec.x) < s) && (fabs(vec.y) < s) && (fabs(vec.z) < s));
 }
 
+vec3 vec3_refract(vec3 uv, vec3 n, float etai_over_etat)
+{
+	float cos_theta = fmin(vec3_dot(vec3_mult_scalar(uv, -1), n), 1.0);
+	vec3 cos_theta_n = vec3_mult_scalar(n, cos_theta);
+	vec3 r_out_perp = vec3_mult_scalar(vec3_sum(uv, cos_theta_n), etai_over_etat);
+	vec3 r_out_parallel = vec3_mult_scalar(n, -sqrt(fabsf((float) 1.0 - vec3_norm_squared(r_out_perp))));
+	return vec3_sum(r_out_perp, r_out_parallel);
+}
+
 vec3 vec3_reflect(vec3 v, vec3 n)
 {
 	return (vec3_sum(v, vec3_mult_scalar(n, -2 * vec3_dot(v, n))));

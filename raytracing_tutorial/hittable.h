@@ -15,6 +15,12 @@ typedef struct hit_record
 	material *material;
 } hit_record;
 
+void hit_set_face_normal(hit_record *rec, ray r, vec3 outward_normal)
+{
+	rec->front_face = vec3_dot(r.direction, outward_normal) < 0;
+	rec->normal = rec->front_face ? outward_normal : vec3_mult_scalar(outward_normal, -1.0);
+}
+
 typedef struct sphere
 {
 	int type;
@@ -22,12 +28,6 @@ typedef struct sphere
 	float radius;
 	material *material;
 } sphere;
-
-void hit_set_face_normal(hit_record *rec, ray r, vec3 outward_normal)
-{
-	rec->front_face = vec3_dot(r.direction, outward_normal) < 0;
-	rec->normal = rec->front_face ? outward_normal : vec3_mult_scalar(outward_normal, -1.0);
-}
 
 int hit_sphere(sphere s, ray r, float t_min, float t_max, hit_record *rec)
 {

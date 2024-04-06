@@ -20,17 +20,14 @@ camera create_default_camera()
 	float focal_length = 1.0;
 
 	point3 origin = {0.0};
-	vec3 horizontal = {viewport_width, 0.0, 0.0};
-	vec3 vertical = {0.0, viewport_height, 0.0};
-	
 	camera ret = {0};
 	ret.horizontal = (vec3) {viewport_width, 0.0, 0.0};
 	ret.vertical = (vec3) {0.0, viewport_height, 0.0};
 
 	ret.lower_left_corner = (vec3)
 	{
-		origin.x - horizontal.x / 2,
-		origin.y - vertical.y / 2,
+		origin.x - ret.horizontal.x / 2,
+		origin.y - ret.vertical.y / 2,
 		-focal_length
 	};
 	return (ret);
