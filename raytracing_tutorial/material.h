@@ -12,7 +12,7 @@ typedef enum
 	METAL,
 	DIELECTRIC,
 	DIFFUSE_LIGHT
-} material_type;
+} materials;
 
 typedef struct lambertian
 {
@@ -28,9 +28,9 @@ lambertian create_lambertian(color albedo)
 	return ret;
 }
 
-int lambertian_scatter(lambertian l, ray r, hit_record *rec, color *attenuation, ray *scattered)
+int lambertian_scatter(lambertian l, ray r, hit_record *rec, color *attenuation, ray *scattered, unsigned int *seed)
 {
-	vec3 scatter_direction = vec3_sum(rec->normal, vec3_random_unit_vector());
+	vec3 scatter_direction = vec3_sum(rec->normal, vec3_random_unit_vector(seed));
 	if (vec3_near_zero(scatter_direction))
 		scatter_direction = rec->normal;
 	ray new_r = {0};
@@ -57,12 +57,12 @@ metal create_metal(color albedo, float fuzz)
 	return ret;
 }
 
-int metal_scatter(metal m, ray r, hit_record *rec, color *attenuation, ray *scattered)
+int metal_scatter(metal m, ray r, hit_record *rec, color *attenuation, ray *scattered, unsigned int *seed)
 {
 	vec3 reflected = vec3_reflect(vec3_normalized(r.direction), rec->normal);
 	ray new_r = {0};
 	new_r.origin = rec->p;
-	new_r.direction = vec3_sum(reflected, vec3_mult_scalar(vec3_random_in_unit_sphere(), m.fuzz));
+	new_r.direction = vec3_sum(reflected, vec3_mult_scalar(vec3_random_in_unit_sphere(seed), m.fuzz));
 
 	*scattered = new_r;
 	*attenuation = m.albedo;
@@ -77,7 +77,7 @@ typedef struct dielectric
 
 dielectric create_dielectric(float ir)
 {
-	dielectric ret = {0};
+	dielectric ret = {0.0};
 	ret.type = DIELECTRIC;
 	ret.ir = ir;
 	return ret;
@@ -85,24 +85,27 @@ dielectric create_dielectric(float ir)
 
 float reflectance(float cos, float ir)
 {
-	float r0 = (1 - ir) / (1 + ir);
+	float r0 = (1. - ir) / (1. + ir);
 	r0 *= r0;
-	return r0 + (1 - r0) * pow((1 - cos), 5);
+	return r0 + (1 - r0) * pow ((1 - cos), 5);
 }
 
-int dielectric_scatter(dielectric d, ray r, hit_record *rec, color *attenuation, ray *scattered)
+int dielectric_scatter(dielectric d, ray r, hit_record *rec, color *attenuation, ray *scattered, unsigned int *seed)
 {
-	*attenuation = (color) {1.0, 1.0, 1.0};
-	float refraction_ratio = rec->front_face ? (1.0 / d.ir) : d.ir;
-	vec3 unit_direction = vec3_normalized(r.direction);
-	float cos_theta = fmin(vec3_dot(vec3_mult_scalar(unit_direction, -1), rec->normal), 1.0);
-	float sin_theta = sqrt(1.0 - cos_theta * cos_theta);
+	*attenuation = (color) { 1., 1., 1. };
+	float refraction_ratio = rec->front_face ? (1.0) / d.ir : d.ir;
+
+	vec3 unit_direction = vec3_normalized (r.direction);
+	float cos_theta = fmin (
+	vec3_dot(vec3_mult_scalar (unit_direction, -1.0), rec->normal), 1.0);
+	float sin_theta = sqrt (1.0 - cos_theta * cos_theta);
+
 	int cannot_refract = refraction_ratio * sin_theta > 1.0;
-	vec3 direction = {0};
-	if (cannot_refract || reflectance(cos_theta, refraction_ratio) > random_float())
-		direction = vec3_reflect(unit_direction, rec->normal);
+	vec3 direction = {0.0};
+	if (cannot_refract || reflectance (cos_theta, refraction_ratio) > random_float (seed))
+		direction = vec3_reflect (unit_direction, rec->normal);
 	else
-		direction = vec3_refract(unit_direction, rec->normal, refraction_ratio);
+		direction = vec3_refract (unit_direction, rec->normal, refraction_ratio);
 	*scattered = (ray) {rec->p, direction};
 	return 1;
 }
@@ -115,7 +118,7 @@ typedef struct diffuse_light
 
 diffuse_light create_diffuse_light(color emit)
 {
-	diffuse_light ret = {0};
+	diffuse_light ret = {0.0};
 	ret.type = DIFFUSE_LIGHT;
 	ret.emit = emit;
 	return ret;
@@ -135,18 +138,18 @@ typedef union material
 	diffuse_light diffuse_light;
 } material;
 
-int material_scatter(material *m, ray r, hit_record *rec, color *attenuation, ray *scattered)
+int material_scatter(material *m, ray r, hit_record *rec, color *attenuation, ray *scattered, unsigned int *seed)
 {
 	switch (m->type)
 	{
 		case LAMBERTIAN:
-			return lambertian_scatter(*(lambertian*)m, r, rec, attenuation, scattered);
+			return lambertian_scatter(*(lambertian*)m, r, rec, attenuation, scattered, seed);
 			break;
 		case METAL:
-			return metal_scatter(*(metal*)m, r, rec, attenuation, scattered);
+			return metal_scatter(*(metal*)m, r, rec, attenuation, scattered, seed);
 			break;
 		case DIELECTRIC:
-			return dielectric_scatter(*(dielectric*)m, r, rec, attenuation, scattered);
+			return dielectric_scatter(*(dielectric*)m, r, rec, attenuation, scattered, seed);
 			break;
 		default:
 			return 0;

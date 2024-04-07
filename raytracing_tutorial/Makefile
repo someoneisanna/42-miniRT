@@ -7,7 +7,7 @@ raytracer: raytracer.c
 .PHONY: run clean view
 
 output.ppm: raytracer
-	./raytracer > output.ppm
+	time ./raytracer > output.ppm
 
 clean:
 	rm -f raytracer output.ppm

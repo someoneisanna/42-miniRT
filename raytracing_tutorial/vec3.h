@@ -76,47 +76,47 @@ int vec3_near_zero(vec3 vec)
 
 vec3 vec3_refract(vec3 uv, vec3 n, float etai_over_etat)
 {
-	float cos_theta = fmin(vec3_dot(vec3_mult_scalar(uv, -1), n), 1.0);
-	vec3 cos_theta_n = vec3_mult_scalar(n, cos_theta);
-	vec3 r_out_perp = vec3_mult_scalar(vec3_sum(uv, cos_theta_n), etai_over_etat);
-	vec3 r_out_parallel = vec3_mult_scalar(n, -sqrt(fabsf((float) 1.0 - vec3_norm_squared(r_out_perp))));
-	return vec3_sum(r_out_perp, r_out_parallel);
+	float cos_theta = fmin (vec3_dot (vec3_mult_scalar (uv, -1.0), n), 1.0);
+	vec3 cos_theta_n = vec3_mult_scalar (n, cos_theta);
+	vec3 r_out_perp = vec3_mult_scalar (vec3_sum (uv, cos_theta_n), etai_over_etat);
+	vec3 r_out_parallel = vec3_mult_scalar (n, -sqrt (fabsf ((float) 1. - vec3_norm_squared (r_out_perp))));
+	return vec3_sum (r_out_perp, r_out_parallel);
 }
 
 vec3 vec3_reflect(vec3 v, vec3 n)
 {
-	return (vec3_sum(v, vec3_mult_scalar(n, -2 * vec3_dot(v, n))));
+	return vec3_sum (v, vec3_mult_scalar (n, -2 * vec3_dot (v, n)));
 }
 
-vec3 vec3_random()
+vec3 vec3_random(unsigned int *seed)
 {
-	return ((vec3) {random_float(), random_float(), random_float()});
+	return ((vec3) {random_float(seed), random_float(seed), random_float(seed)});
 }
 
-vec3 vec3_random_min_max(float min, float max)
+vec3 vec3_random_min_max(unsigned int *seed, float min, float max)
 {
-	return ((vec3) {random_float_min_max(min, max), random_float_min_max(min, max), random_float_min_max(min, max)});
+	return ((vec3) {random_float_min_max(seed, min, max), random_float_min_max(seed, min, max), random_float_min_max(seed, min, max)});
 }
 
-vec3 vec3_random_in_unit_sphere()
+vec3 vec3_random_in_unit_sphere(unsigned int *seed)
 {
 	while (1)
 	{
-		vec3 p = vec3_random_min_max(-1, 1);
+		vec3 p = vec3_random_min_max(seed, -1, 1);
 		if (vec3_norm_squared(p) >= 1)
 			continue;
 		return p;
 	}
 }
 
-vec3 vec3_random_unit_vector()
+vec3 vec3_random_unit_vector(unsigned int *seed)
 {
-	return vec3_normalized(vec3_random_in_unit_sphere());
+	return vec3_normalized(vec3_random_in_unit_sphere(seed));
 }
 
-vec3 vec3_random_in_hemisphere(vec3 normal)
+vec3 vec3_random_in_hemisphere(vec3 normal, unsigned int *seed)
 {
-	vec3 in_unit_sphere = vec3_random_in_unit_sphere();
+	vec3 in_unit_sphere = vec3_random_in_unit_sphere(seed);
 	if (vec3_dot(in_unit_sphere, normal) > 0.0)
 		return in_unit_sphere;
 	else
