@@ -11,7 +11,7 @@ typedef struct ray
 
 point3 ray_at(ray ray, float t)
 {
-	point3 ret = vec3_sum(ray.origin, vec3_mult_scalar(ray.direction, t));
+	point3 ret = ft_op(ray.origin, '+', ft_ops(ray.direction, '*', t));
 	return ret;
 }
 

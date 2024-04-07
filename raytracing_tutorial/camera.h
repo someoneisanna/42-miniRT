@@ -35,9 +35,9 @@ camera create_default_camera()
 
 ray camera_get_ray(camera camera, float u, float v)
 {
-	vec3 temp1 = vec3_sum(camera.lower_left_corner, vec3_mult_scalar(camera.horizontal, u));
-	vec3 temp2 = vec3_sum(temp1, vec3_mult_scalar(camera.vertical, v));
-	vec3 temp3 = vec3_sum(temp2, vec3_mult_scalar(camera.origin, -1.0));
+	vec3 temp1 = ft_op(camera.lower_left_corner, '+', ft_ops(camera.horizontal, '*', u));
+	vec3 temp2 = ft_op(temp1, '+', ft_ops(camera.vertical, '*', v));
+	vec3 temp3 = ft_op(temp2, '-', camera.origin);
 	ray ray = {0};
 	ray.direction = temp3;
 	return (ray);

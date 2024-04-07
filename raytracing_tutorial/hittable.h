@@ -17,8 +17,8 @@ typedef struct hit_record
 
 void hit_set_face_normal(hit_record *rec, ray r, vec3 outward_normal)
 {
-	rec->front_face = vec3_dot(r.direction, outward_normal) < 0;
-	rec->normal = rec->front_face ? outward_normal : vec3_mult_scalar(outward_normal, -1.0);
+	rec->front_face = ft_dot(r.direction, outward_normal) < 0;
+	rec->normal = rec->front_face ? outward_normal : ft_ops(outward_normal, '*', -1.0);
 }
 
 typedef struct sphere
@@ -31,10 +31,10 @@ typedef struct sphere
 
 int hit_sphere(sphere s, ray r, float t_min, float t_max, hit_record *rec)
 {
-	vec3 oc = vec3_sum(r.origin, vec3_mult_scalar(s.center, -1.0));
-	float a = vec3_norm_squared(r.direction);
-	float half_b = vec3_dot(oc, r.direction);
-	float c = vec3_norm_squared(oc) - s.radius * s.radius;
+	vec3 oc = ft_op(r.origin, '-', s.center);
+	float a = ft_norm(YES, r.direction);
+	float half_b = ft_dot(oc, r.direction);
+	float c = ft_norm(YES, oc) - s.radius * s.radius;
 	float discriminant = half_b * half_b - a * c;
 	if (discriminant < 0)
 		return 0;
@@ -49,7 +49,7 @@ int hit_sphere(sphere s, ray r, float t_min, float t_max, hit_record *rec)
 	rec->t = root;
 	rec->p = ray_at(r, rec->t);
 	rec->material = s.material;
-	vec3 outward_normal = vec3_normalized(vec3_sum(rec->p, vec3_mult_scalar(s.center, -1.0)));
+	vec3 outward_normal = ft_normalized(ft_op(rec->p, '-', s.center));
 	hit_set_face_normal(rec, r, outward_normal);
 	return 1;
 }

@@ -6,7 +6,7 @@
 
 void write_color(FILE *restrict __stream, color pixel_color, int samples)
 {
-	pixel_color = vec3_mult_scalar(pixel_color, (float) 1.0 / samples);
+	pixel_color = ft_ops(pixel_color, '*', (float) 1.0 / samples);
 	pixel_color.r = sqrt(pixel_color.r);
 	pixel_color.g = sqrt(pixel_color.g);
 	pixel_color.b = sqrt(pixel_color.b);
@@ -19,7 +19,7 @@ void write_color(FILE *restrict __stream, color pixel_color, int samples)
 void write_color_to_buffer (uint8_t *buffer, int cur, color color, int samples)
 {
 	int ir, ig, ib;
-	color = vec3_mult_scalar (color, (float) 1 / samples);
+	color = ft_ops(color, '*', (float) 1 / samples);
 	color.r = sqrt (color.r);
 	color.g = sqrt (color.g);
 	color.b = sqrt (color.b);

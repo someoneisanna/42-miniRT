@@ -29,10 +29,10 @@ color ray_color(ray r, hittable_list *world, int depth, unsigned int *seed)
 		if (!material_scatter(rec.material, r, &rec, &attenuation, &scattered, seed))
 			return emitted;
 		else
-			return vec3_sum(emitted, vec3_mult_element_wise(attenuation, ray_color(scattered, world, depth - 1, seed)));
+			return ft_op(emitted, '+', ft_op(attenuation, '*', ray_color(scattered, world, depth - 1, seed)));
 		return ((color) {0, 0, 0});
 	}
-	vec3 unit_direction = vec3_normalized(r.direction);
+	vec3 unit_direction = ft_normalized(r.direction);
 	float t = 0.5 * (unit_direction.y + 1.0);
 	return (color) {0, 0, 0};
 }
@@ -51,7 +51,7 @@ void render_image(unsigned int *seed, image *img, int initial_height, int final_
 				float u = ((double) j + random_float_min_max (seed, 0., 2.)) / (img->width - 1);
 				float v = 1. - ((double) i + random_float_min_max (seed, 0., 2.)) / (img->height - 1);
 				ray ray = camera_get_ray (camera, u, v);
-				pixel_color = vec3_sum (pixel_color, ray_color (ray, world, max_depth, seed));
+				pixel_color = ft_op(pixel_color, '+', ray_color (ray, world, max_depth, seed));
 			}
 			write_color_to_buffer ((uint8_t *) img->data, cur, pixel_color, samples_per_pixel);
 		}

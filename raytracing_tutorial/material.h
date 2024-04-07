@@ -30,8 +30,8 @@ lambertian create_lambertian(color albedo)
 
 int lambertian_scatter(lambertian l, ray r, hit_record *rec, color *attenuation, ray *scattered, unsigned int *seed)
 {
-	vec3 scatter_direction = vec3_sum(rec->normal, vec3_random_unit_vector(seed));
-	if (vec3_near_zero(scatter_direction))
+	vec3 scatter_direction = ft_op(rec->normal, '+', ft_random_unit_vector(seed));
+	if (ft_near_zero(scatter_direction))
 		scatter_direction = rec->normal;
 	ray new_r = {0};
 	new_r.origin = rec->p;
@@ -59,10 +59,10 @@ metal create_metal(color albedo, float fuzz)
 
 int metal_scatter(metal m, ray r, hit_record *rec, color *attenuation, ray *scattered, unsigned int *seed)
 {
-	vec3 reflected = vec3_reflect(vec3_normalized(r.direction), rec->normal);
+	vec3 reflected = ft_reflect(ft_normalized(r.direction), rec->normal);
 	ray new_r = {0};
 	new_r.origin = rec->p;
-	new_r.direction = vec3_sum(reflected, vec3_mult_scalar(vec3_random_in_unit_sphere(seed), m.fuzz));
+	new_r.direction = ft_op(reflected, '+', ft_ops(ft_random_in_unit_sphere(seed), '*', m.fuzz));
 
 	*scattered = new_r;
 	*attenuation = m.albedo;
@@ -95,17 +95,17 @@ int dielectric_scatter(dielectric d, ray r, hit_record *rec, color *attenuation,
 	*attenuation = (color) { 1., 1., 1. };
 	float refraction_ratio = rec->front_face ? (1.0) / d.ir : d.ir;
 
-	vec3 unit_direction = vec3_normalized (r.direction);
+	vec3 unit_direction = ft_normalized(r.direction);
 	float cos_theta = fmin (
-	vec3_dot(vec3_mult_scalar (unit_direction, -1.0), rec->normal), 1.0);
+	ft_dot(ft_ops(unit_direction, '*', -1.0), rec->normal), 1.0);
 	float sin_theta = sqrt (1.0 - cos_theta * cos_theta);
 
 	int cannot_refract = refraction_ratio * sin_theta > 1.0;
 	vec3 direction = {0.0};
 	if (cannot_refract || reflectance (cos_theta, refraction_ratio) > random_float (seed))
-		direction = vec3_reflect (unit_direction, rec->normal);
+		direction = ft_reflect (unit_direction, rec->normal);
 	else
-		direction = vec3_refract (unit_direction, rec->normal, refraction_ratio);
+		direction = ft_refract(unit_direction, rec->normal, refraction_ratio);
 	*scattered = (ray) {rec->p, direction};
 	return 1;
 }
