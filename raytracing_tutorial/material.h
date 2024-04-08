@@ -28,6 +28,13 @@ lambertian create_lambertian(color albedo)
 	return ret;
 }
 
+// this function is used to scatter a ray when it hits a lambertian material
+// the scattered ray is a ray that starts at the hit point and goes in a random
+// direction. the direction is calculated by adding the normal at the hit point
+// to a random unit vector.
+// if the random unit vector is exactly the opposite of the normal, the two 
+// would sum to zero and the scattered ray would be zero. this could lead to
+// bad results, so we intercept the condition before we pass it on.
 int lambertian_scatter(lambertian l, ray r, hit_record *rec, color *attenuation, ray *scattered, unsigned int *seed)
 {
 	vec3 scatter_direction = ft_op(rec->normal, '+', ft_random_unit_vector(seed));
@@ -48,6 +55,12 @@ typedef struct metal
 	float fuzz;
 } metal;
 
+// this function is used to create a metal material
+// albedo is the color of the metal
+// fuzz is the amount of fuzziness in the reflection. a fuzz of 0 means a perfect
+// reflection, while a fuzz of 1 means a completely random reflection.
+// the bigger the sphere, the more fuzziness in the reflection, which means the
+// reflection will be more blurry.
 metal create_metal(color albedo, float fuzz)
 {
 	metal ret = {0};
@@ -57,6 +70,9 @@ metal create_metal(color albedo, float fuzz)
 	return ret;
 }
 
+// this function is used to scatter a ray when it hits a metal material
+// the scattered ray is a ray that starts at the hit point and goes in a direction
+// that is the reflection of the incoming ray.
 int metal_scatter(metal m, ray r, hit_record *rec, color *attenuation, ray *scattered, unsigned int *seed)
 {
 	vec3 reflected = ft_reflect(ft_normalized(r.direction), rec->normal);
@@ -69,6 +85,8 @@ int metal_scatter(metal m, ray r, hit_record *rec, color *attenuation, ray *scat
 	return 1;
 }
 
+// this function is used to create a dielectric material
+// ir is the index of refraction of the material
 typedef struct dielectric
 {
 	int type;
@@ -83,6 +101,8 @@ dielectric create_dielectric(float ir)
 	return ret;
 }
 
+// real glass has a reflectance that depends on the angle of incidence
+// here, we use Schlick's approximation to calculate the reflectance
 float reflectance(float cos, float ir)
 {
 	float r0 = (1. - ir) / (1. + ir);
@@ -96,13 +116,12 @@ int dielectric_scatter(dielectric d, ray r, hit_record *rec, color *attenuation,
 	float refraction_ratio = rec->front_face ? (1.0) / d.ir : d.ir;
 
 	vec3 unit_direction = ft_normalized(r.direction);
-	float cos_theta = fmin (
-	ft_dot(ft_ops(unit_direction, '*', -1.0), rec->normal), 1.0);
+	float cos_theta = fmin (ft_dot(ft_ops(unit_direction, '*', -1.0), rec->normal), 1.0);
 	float sin_theta = sqrt (1.0 - cos_theta * cos_theta);
 
 	int cannot_refract = refraction_ratio * sin_theta > 1.0;
 	vec3 direction = {0.0};
-	if (cannot_refract || reflectance (cos_theta, refraction_ratio) > random_float (seed))
+	if (cannot_refract || reflectance (cos_theta, refraction_ratio) > random_float(seed))
 		direction = ft_reflect (unit_direction, rec->normal);
 	else
 		direction = ft_refract(unit_direction, rec->normal, refraction_ratio);

@@ -19,8 +19,14 @@ typedef struct image
 color ray_color(ray r, hittable_list *world, int depth, unsigned int *seed)
 {
 	hit_record rec = {0};
+	// as the recursion goes on until it fails to hit anything, and that may 
+	// take a while, we need to stop the recursion at some point. we do that
+	// by setting a maximum depth, when we reach it, we return black.
 	if (depth <= 0)
 		return ((color) {0, 0, 0});
+	
+	// we will use a t_min of 0.0001 to avoid the shadow acne problem.this 
+	// is caused by floating point precision errors.
 	if (hittable_list_hit(world, r, 0.0001, INFINITY, &rec))
 	{
 		color attenuation;
@@ -37,6 +43,9 @@ color ray_color(ray r, hittable_list *world, int depth, unsigned int *seed)
 	return (color) {0, 0, 0};
 }
 
+// we will go through each pixel in the image and calculate the color of the 
+// pixel. u and v are the coordinates of the pixel in the image. we use random 
+// floats to get a random point in the pixel to get a more realistic image.
 void render_image(unsigned int *seed, image *img, int initial_height, int final_height, int samples_per_pixel, camera camera, hittable_list *world, int max_depth)
 {
 	for (int i = initial_height; i < final_height; i++)
@@ -51,7 +60,7 @@ void render_image(unsigned int *seed, image *img, int initial_height, int final_
 				float u = ((double) j + random_float_min_max (seed, 0., 2.)) / (img->width - 1);
 				float v = 1. - ((double) i + random_float_min_max (seed, 0., 2.)) / (img->height - 1);
 				ray ray = camera_get_ray (camera, u, v);
-				pixel_color = ft_op(pixel_color, '+', ray_color (ray, world, max_depth, seed));
+				pixel_color = ft_op(pixel_color, '+', ray_color(ray, world, max_depth, seed));
 			}
 			write_color_to_buffer ((uint8_t *) img->data, cur, pixel_color, samples_per_pixel);
 		}
@@ -95,11 +104,11 @@ void *routine(void *arg)
 
 int main(int argc, char *argv[])
 {
-	float aspect_ratio = 16.0 / 9.0;
-	int width = 800;
-	int height = (int) (width/aspect_ratio);
-	int samples_per_pixel = 100;
-	int max_depth = 5;
+	float aspect_ratio = 16.0 / 9.0;			// width / height - common aspect ratio for monitors
+	int width = 800;							// horizontal resolution
+	int height = (int) (width/aspect_ratio);	// vertical resolution
+	int samples_per_pixel = 100;				// for each pixel, we have a number of samples that will be averaged to get the final color
+	int max_depth = 5;							// this is the maximum number of bounces a ray can have (recursion in the ray_color function)
 
 	int world_size = 5;
 	hittable objects[world_size];
