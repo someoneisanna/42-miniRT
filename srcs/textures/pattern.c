@@ -6,7 +6,7 @@
 /*   By: ataboada <ataboada@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 16:34:52 by ataboada          #+#    #+#             */
-/*   Updated: 2024/06/12 15:39:34 by ataboada         ###   ########.fr       */
+/*   Updated: 2024/06/13 16:37:20 by ataboada         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,9 +62,9 @@ t_color	ft_pattern_at_shape(t_pattern p, t_shapes *object, t_point world_point)
 	else if (p.type == XPM)
 	{
 		if (object->type == PLANE)
-			return (ft_xpm_at_plane(p, pattern_pt));
+			return (ft_xpm_at_shape(PLANE, p, pattern_pt));
 		else if (object->type == SPHERE || object->type == CYLINDER)
-			return (ft_xpm_at_sphere(p, pattern_pt));
+			return (ft_xpm_at_shape(object->type, p, pattern_pt));
 		return (ft_xpm_at(p, pattern_pt));
 	}
 	return ((t_color){0, 0, 0, 3});

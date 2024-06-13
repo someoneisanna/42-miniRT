@@ -6,7 +6,7 @@
 /*   By: ataboada <ataboada@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 15:35:54 by ataboada          #+#    #+#             */
-/*   Updated: 2024/06/07 15:54:15 by ataboada         ###   ########.fr       */
+/*   Updated: 2024/06/13 15:45:09 by ataboada         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,6 +109,7 @@ void	ft_switch_theme(t_world *w)
 	w->ui.flags |= UI_THEME;
 	while (++index < 6)
 		w->ui.theme[index] = w->ui.themes[i % 2][index];
+	mlx_destroy_image(w->mlx, w->img2.img);
 	w->img2.img = mlx_new_image(w->mlx, UI_WIDTH, UI_WIN_WIDTH / UI_RATIO);
 	w->img2.addr = mlx_get_data_addr(w->img2.img, &w->img2.bpp,
 			&w->img2.line_length, &w->img2.endian);

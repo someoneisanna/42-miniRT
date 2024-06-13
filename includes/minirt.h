@@ -6,7 +6,7 @@
 /*   By: ataboada <ataboada@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:26:03 by ataboada          #+#    #+#             */
-/*   Updated: 2024/06/12 17:17:30 by ataboada         ###   ########.fr       */
+/*   Updated: 2024/06/13 16:35:54 by ataboada         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,8 +125,7 @@ void		ft_load_xpm_to_matrix(t_canvas *texture, char *xpm_file);
 t_canvas	ft_read_xpm(char *xpm_file);
 t_pattern	ft_create_xpm_pattern(int pattern_type, char *xpm_file);
 t_color		ft_xpm_at(t_pattern pattern, t_point point);
-t_color		ft_xpm_at_sphere(t_pattern pattern, t_point point);
-t_color		ft_xpm_at_plane(t_pattern pattern, t_point point);
+t_color		ft_xpm_at_shape(int shape_type, t_pattern pattern, t_point point);
 
 // UTILS _______________________________________________________________________
 
