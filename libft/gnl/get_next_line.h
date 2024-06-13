@@ -6,7 +6,7 @@
 /*   By: ataboada <ataboada@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 12:42:01 by ataboada          #+#    #+#             */
-/*   Updated: 2024/05/30 16:30:51 by ataboada         ###   ########.fr       */
+/*   Updated: 2024/06/10 13:53:34 by ataboada         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,8 @@
 
 // ---------------------------------- PROTOTYPES -------------------------------
 
-char	*get_next_line(int fd, int stop);
-char	*gnl_read_file(int fd, char *storage, int stop);
+char	*get_next_line(int fd);
+char	*gnl_read_file(int fd, char *storage);
 char	*gnl_get_current_line(char *storage);
 char	*gnl_update_storage(char *storage);
 

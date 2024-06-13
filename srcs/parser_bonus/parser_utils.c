@@ -6,29 +6,37 @@
 /*   By: ataboada <ataboada@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 21:35:51 by ataboada          #+#    #+#             */
-/*   Updated: 2024/05/30 17:32:34 by ataboada         ###   ########.fr       */
+/*   Updated: 2024/06/06 15:39:06 by ataboada         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
-void	ft_perror(t_world *w, char *msg)
+void	ft_perror(t_world *w, t_shapes *s, char *msg)
 {
-	ft_putstr_fd("\033[1m\033[31mError \033[0m\n", 2);
+	dup2(STDERR_FILENO, STDOUT_FILENO);
+	printf("\033[1m\033[31mError \033[0m\n");
 	if (msg)
 	{
-		ft_putstr_fd(msg, 2);
-		ft_putchar_fd('\n', 2);
+		printf("%s", msg);
+		if (w && w->line)
+			printf(" at line: \033[31m%s\033[0m", w->line);
+		else
+			printf("\n");
 	}
 	else
 		perror(NULL);
 	get_next_line(3, 1);
+	if (s)
+		free(s);
 	if (w && w->line)
 		free(w->line);
+	if (w)
+		ft_free_all_allocated_memory(w);
 	exit(1);
 }
 
-double	ft_atof(t_world *w, char *s)
+double	ft_atof(t_world *w, t_shapes *s, char *str)
 {
 	double	res;
 	double	fra;
@@ -37,31 +45,31 @@ double	ft_atof(t_world *w, char *s)
 	res = 0;
 	fra = 1;
 	sig = 1;
-	while (ft_isspace(*s))
-		s++;
-	if (*s == '\0')
-		ft_perror(w, "Double is not valid");
-	if (*s == '-')
+	while (ft_isspace(*str))
+		str++;
+	if (*str == '\0')
+		ft_perror(w, s, "Double is not valid");
+	if (*str == '-')
 		sig = -1;
-	if (*s == '-' || *s == '+')
-		s++;
-	while (ft_isdigit(*s))
-		res = res * 10 + *s++ - '0';
-	if (*s == '.')
-		s++;
-	while (ft_isdigit(*s))
+	if (*str == '-' || *str == '+')
+		str++;
+	while (ft_isdigit(*str))
+		res = res * 10 + *str++ - '0';
+	if (*str == '.')
+		str++;
+	while (ft_isdigit(*str))
 	{
-		res = res * 10 + *s++ - '0';
+		res = res * 10 + *str++ - '0';
 		fra *= 10;
 	}
 	return (res / fra * sig);
 }
 
-double	ft_get_double(t_world *w, char **line, char d)
+double	ft_get_double(t_world *w, t_shapes *s, char **line, char d)
 {
 	int		i;
 	int		dot;
-	char	s[32];
+	char	str[32];
 
 	i = -1;
 	dot = 0;
@@ -70,23 +78,23 @@ double	ft_get_double(t_world *w, char **line, char d)
 	while (**line == ' ')
 		(*line)++;
 	if (**line == '-' || **line == '+')
-		s[++i] = *(*line)++;
+		str[++i] = *(*line)++;
 	while (**line != d && **line != '\n' && **line)
 	{
 		if (**line == '.')
 			dot++;
 		if ((!ft_isdigit(**line) && **line != '.' && **line != ' ')
 			|| dot > 1 || i > 30)
-			ft_perror(w, "Double is not valid");
+			ft_perror(w, s, "Double is not valid");
 		else if (**line != ' ')
-			s[++i] = **line;
+			str[++i] = **line;
 		(*line)++;
 	}
-	s[++i] = '\0';
-	return (ft_atof(w, s));
+	str[++i] = '\0';
+	return (ft_atof(w, s, str));
 }
 
-t_point	ft_get_tuple(t_world *world, char **line, double w)
+t_point	ft_get_tuple(t_world *world, t_shapes *s, char **line, double w)
 {
 	double	color;
 	t_vec3	tuple;
@@ -101,17 +109,17 @@ t_point	ft_get_tuple(t_world *world, char **line, double w)
 			(*line)++;
 		else if (ft_isdigit(**line) || **line == '-' || **line == '+')
 		{
-			tuple.x = ft_get_double(world, line, ',') / color;
-			tuple.y = ft_get_double(world, line, ',') / color;
-			tuple.z = ft_get_double(world, line, ' ') / color;
+			tuple.x = ft_get_double(world, s, line, ',') / color;
+			tuple.y = ft_get_double(world, s, line, ',') / color;
+			tuple.z = ft_get_double(world, s, line, ' ') / color;
 			tuple.w = w;
 			break ;
 		}
 		else
-			ft_perror(world, "Tuple is not valid");
+			ft_perror(world, s, "Tuple is not valid");
 	}
 	if (w == 3 && ft_in_range(tuple, 0, 1) == false)
-		ft_perror(world, "Color is not in range");
+		ft_perror(world, s, "Color is not in range");
 	return (tuple);
 }
 

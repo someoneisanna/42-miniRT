@@ -6,7 +6,7 @@
 /*   By: ataboada <ataboada@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 16:34:52 by ataboada          #+#    #+#             */
-/*   Updated: 2024/05/30 17:19:44 by ataboada         ###   ########.fr       */
+/*   Updated: 2024/06/12 15:39:34 by ataboada         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ t_pattern	ft_create_pattern(char pattern_type, t_color a, t_color b)
 	else if (pattern_type == 'X')
 		pattern.type = XPM;
 	else
-		ft_perror(NULL, "Invalid pattern type");
+		ft_perror(NULL, NULL, "Invalid pattern type");
 	pattern.a = a;
 	pattern.b = b;
 	pattern.transform = ft_create_matrix(4, 4, YES);
@@ -60,6 +60,12 @@ t_color	ft_pattern_at_shape(t_pattern p, t_shapes *object, t_point world_point)
 	else if (p.type == CHECKERS)
 		return (ft_checkers_at(p, object->type, pattern_pt));
 	else if (p.type == XPM)
+	{
+		if (object->type == PLANE)
+			return (ft_xpm_at_plane(p, pattern_pt));
+		else if (object->type == SPHERE || object->type == CYLINDER)
+			return (ft_xpm_at_sphere(p, pattern_pt));
 		return (ft_xpm_at(p, pattern_pt));
+	}
 	return ((t_color){0, 0, 0, 3});
 }

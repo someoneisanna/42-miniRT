@@ -3,28 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anna <anna@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: ataboada <ataboada@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 12:40:24 by ataboada          #+#    #+#             */
-/*   Updated: 2024/05/10 10:54:04 by anna             ###   ########.fr       */
+/*   Updated: 2024/06/10 13:53:27 by ataboada         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-char	*get_next_line(int fd, int stop);
-char	*gnl_read_file(int fd, char *storage, int stop);
-char	*gnl_get_current_line(char *storage);
-char	*gnl_update_storage(char *storage);
-
-char	*get_next_line(int fd, int stop)
+char	*get_next_line(int fd)
 {
 	static char	*storage;
 	char		*line;
 
 	if (fd < 0 || BUFFER_SIZE < 1)
 		return (NULL);
-	storage = gnl_read_file(fd, storage, stop);
+	storage = gnl_read_file(fd, storage);
 	if (!storage)
 		return (NULL);
 	line = gnl_get_current_line(storage);
@@ -37,7 +32,7 @@ char	*get_next_line(int fd, int stop)
 	return (line);
 }
 
-char	*gnl_read_file(int fd, char *storage, int stop)
+char	*gnl_read_file(int fd, char *storage)
 {
 	char	*buffer;
 	int		bytes_read;
@@ -51,7 +46,7 @@ char	*gnl_read_file(int fd, char *storage, int stop)
 		bytes_read = read(fd, buffer, BUFFER_SIZE);
 		if (bytes_read == 0)
 			break ;
-		if (bytes_read == -1 || stop == 1)
+		if (bytes_read == -1)
 		{
 			if (storage)
 				free(storage);

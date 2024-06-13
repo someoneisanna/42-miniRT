@@ -6,7 +6,7 @@
 /*   By: ataboada <ataboada@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 21:34:45 by ataboada          #+#    #+#             */
-/*   Updated: 2024/05/30 17:40:19 by ataboada         ###   ########.fr       */
+/*   Updated: 2024/06/07 15:06:43 by ataboada         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,12 +17,12 @@ void	ft_get_sphere(char *line, t_world *w)
 	t_shapes	*s;
 
 	line += 2;
-	w->ui.n_sp++;
+	w->ui.n_objs[0]++;
 	s = ft_create_shape(SPHERE);
-	s->sphere.coordinates = ft_get_tuple(w, &line, 1);
-	s->sphere.diameter = ft_get_double(w, &line, ' ');
+	s->sphere.coordinates = ft_get_tuple(w, s, &line, 1);
+	s->sphere.diameter = ft_get_double(w, s, &line, ' ');
 	if (s->sphere.diameter < 0)
-		ft_perror(w, "Sphere diameter is out of range");
+		ft_perror(w, s, "Sphere diameter is out of range");
 	ft_get_texture(w, s, &line);
 	s->material.ambient = ft_ops(w->ambient.color, '*', w->ambient.ratio);
 	ft_get_transform(s, s->sphere.coordinates, (t_vec3){0, 0, 0, 0},
@@ -35,12 +35,12 @@ void	ft_get_plane(char *line, t_world *w)
 	t_shapes	*s;
 
 	line += 2;
-	w->ui.n_pl++;
+	w->ui.n_objs[1]++;
 	s = ft_create_shape(PLANE);
-	s->plane.coordinates = ft_get_tuple(w, &line, 1);
-	s->plane.orientation = ft_get_tuple(w, &line, 0);
+	s->plane.coordinates = ft_get_tuple(w, s, &line, 1);
+	s->plane.orientation = ft_get_tuple(w, s, &line, 0);
 	if (ft_in_range(s->plane.orientation, -1, 1) == false)
-		ft_perror(w, "Plane orientation is out of range");
+		ft_perror(w, s, "Plane orientation is out of range");
 	ft_get_texture(w, s, &line);
 	s->material.ambient = ft_ops(w->ambient.color, '*', w->ambient.ratio);
 	ft_get_transform(s, s->plane.coordinates, s->plane.orientation, 0);
@@ -52,16 +52,16 @@ void	ft_get_cylinder(char *line, t_world *w)
 	t_shapes	*s;
 
 	line += 2;
-	w->ui.n_cy++;
+	w->ui.n_objs[2]++;
 	s = ft_create_shape(CYLINDER);
-	s->cylinder.coordinates = ft_get_tuple(w, &line, 1);
-	s->cylinder.orientation = ft_get_tuple(w, &line, 0);
+	s->cylinder.coordinates = ft_get_tuple(w, s, &line, 1);
+	s->cylinder.orientation = ft_get_tuple(w, s, &line, 0);
 	if (ft_in_range(s->cylinder.orientation, -1, 1) == false)
-		ft_perror(w, "Cylinder orientation is out of range");
-	s->cylinder.diameter = ft_get_double(w, &line, ' ');
-	s->cylinder.height = ft_get_double(w, &line, ' ');
+		ft_perror(w, s, "Cylinder orientation is out of range");
+	s->cylinder.diameter = ft_get_double(w, s, &line, ' ');
+	s->cylinder.height = ft_get_double(w, s, &line, ' ');
 	if (s->cylinder.diameter < 0 || s->cylinder.height < 0)
-		ft_perror(w, "Cylinder diameter and/or height are not valid");
+		ft_perror(w, s, "Cylinder diameter and/or height are not valid");
 	ft_get_texture(w, s, &line);
 	s->material.ambient = ft_ops(w->ambient.color, '*', w->ambient.ratio);
 	ft_get_transform(s, s->cylinder.coordinates, s->cylinder.orientation,
@@ -77,15 +77,15 @@ void	ft_get_cone(char *line, t_world *w)
 	t_shapes	*s;
 
 	line += 2;
-	w->ui.n_co++;
+	w->ui.n_objs[3]++;
 	s = ft_create_shape(CONE);
-	s->cone.coordinates = ft_get_tuple(w, &line, 1);
-	s->cone.orientation = ft_get_tuple(w, &line, 0);
+	s->cone.coordinates = ft_get_tuple(w, s, &line, 1);
+	s->cone.orientation = ft_get_tuple(w, s, &line, 0);
 	if (ft_in_range(s->cone.orientation, -1, 1) == false)
-		ft_perror(w, "Cone orientation is out of range");
-	s->cone.diameter = ft_get_double(w, &line, ' ');
+		ft_perror(w, s, "Cone orientation is out of range");
+	s->cone.diameter = ft_get_double(w, s, &line, ' ');
 	if (s->cone.diameter < 0)
-		ft_perror(w, "Cone diameter is not valid");
+		ft_perror(w, s, "Cone diameter is not valid");
 	ft_get_texture(w, s, &line);
 	s->material.ambient = ft_ops(w->ambient.color, '*', w->ambient.ratio);
 	ft_get_transform(s, s->cone.coordinates, s->cone.orientation,
@@ -101,13 +101,13 @@ void	ft_get_cube(char *line, t_world *w)
 	t_shapes	*s;
 
 	line += 2;
-	w->ui.n_cb++;
+	w->ui.n_objs[4]++;
 	s = ft_create_shape(CUBE);
-	s->cube.coordinates = ft_get_tuple(w, &line, 1);
-	s->cube.orientation = ft_get_tuple(w, &line, 0);
-	s->cube.size = ft_get_double(w, &line, ' ');
+	s->cube.coordinates = ft_get_tuple(w, s, &line, 1);
+	s->cube.orientation = ft_get_tuple(w, s, &line, 0);
+	s->cube.size = ft_get_double(w, s, &line, ' ');
 	if (s->cube.size < 0)
-		ft_perror(w, "Cube size is not valid");
+		ft_perror(w, s, "Cube size is not valid");
 	ft_get_texture(w, s, &line);
 	s->material.ambient = ft_ops(w->ambient.color, '*', w->ambient.ratio);
 	ft_get_transform(s, s->cube.coordinates, s->cube.orientation,

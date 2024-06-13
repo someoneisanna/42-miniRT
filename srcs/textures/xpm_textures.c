@@ -6,7 +6,7 @@
 /*   By: ataboada <ataboada@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 16:32:13 by ataboada          #+#    #+#             */
-/*   Updated: 2024/05/30 17:19:37 by ataboada         ###   ########.fr       */
+/*   Updated: 2024/06/13 14:23:12 by ataboada         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,13 +28,21 @@ void	ft_load_xpm_to_matrix(t_canvas *scene, char *xpm_file)
 		printf("Error reading xpm file\n");
 	color = (int *)mlx_get_data_addr(img_ptr.img, &img_ptr.bpp,
 			&img_ptr.line_length, &img_ptr.endian);
+	printf("height: %d, width: %d\n", scene->height, scene->width);
 	y = -1;
 	while (++y < scene->height)
 	{
 		x = -1;
 		while (++x < scene->width)
-			scene->pixels[y][x] = ft_rgb_to_int(color[y * scene->width + x]);
+		{
+			//printf("%d, %d\n", y, x);
+			if (scene->pixels[y] != NULL)
+				scene->pixels[y][x] = ft_rgb_to_int(color[y * scene->width + x]);
+			else
+				printf("Error reading xpm file\n");
+		}
 	}
+	printf("********************************ft_load_xpm_to_matrix\n\n\n\n\n\n");
 	mlx_destroy_image(mlx_ptr, img_ptr.img);
 	mlx_destroy_display(mlx_ptr);
 	free(mlx_ptr);
@@ -51,7 +59,7 @@ t_canvas	ft_read_xpm(char *xpm_file)
 
 	fd = open(xpm_file, O_RDONLY);
 	if (fd < 0)
-		ft_perror(NULL, "Error opening xpm file\n");
+		ft_perror(NULL, NULL, "Error opening xpm file\n");
 	while (1)
 	{
 		line = get_next_line(fd, NO);
@@ -60,13 +68,14 @@ t_canvas	ft_read_xpm(char *xpm_file)
 			width = ft_atoi(line + 1);
 			height = ft_atoi(ft_strchr(line, ' '));
 			texture = ft_create_canvas(width, height);
+			free(line);
 			break ;
 		}
 		free(line);
 	}
 	ft_load_xpm_to_matrix(&texture, xpm_file);
-	get_next_line(fd, YES);
 	close(fd);
+	free(xpm_file);
 	return (texture);
 }
 
@@ -96,5 +105,43 @@ t_color	ft_xpm_at(t_pattern pattern, t_point point)
 	v = 1.0 - ((point.y + 1.0) / 2.0);
 	x = (int)(u * (pattern.xpm.width - 1) + 0.5);
 	y = (int)(v * (pattern.xpm.height - 1) + 0.5);
+	return (pattern.xpm.pixels[y][x]);
+}
+
+t_color	ft_xpm_at_plane(t_pattern pattern, t_point point)
+{
+	double	u;
+	double	v;
+	int		x;
+	int		y;
+
+	u = point.x / (pattern.xpm.width / 50) + 0.5;
+	v = 0.5 - point.z / (pattern.xpm.height / 50);
+	x = abs((int)(u * (pattern.xpm.width - 1) + 0.5));
+	y = abs((int)(v * (pattern.xpm.height - 1) + 0.5));
+	x = x % pattern.xpm.width;
+	y = y % pattern.xpm.height;
+	return (pattern.xpm.pixels[y][x]);
+}
+
+t_color	ft_xpm_at_sphere(t_pattern pattern, t_point point)
+{
+	double	u;
+	double	v;
+	int		x;
+	int		y;
+
+	u = atan2(point.x, point.z);
+	v = acos(point.y);
+	u = 1.0 - (u / (2.0 * M_PI) + 0.5);
+	v = v / M_PI;
+	x = (int)(u * (pattern.xpm.width - 1) + 0.5);
+	y = (int)(v * (pattern.xpm.height - 1) + 0.5);
+	x = x % pattern.xpm.width;
+	y = y % pattern.xpm.height;
+	if (x < 0)
+		x += pattern.xpm.width;
+	if (y < 0)
+		y += pattern.xpm.height;
 	return (pattern.xpm.pixels[y][x]);
 }

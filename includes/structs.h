@@ -6,7 +6,7 @@
 /*   By: ataboada <ataboada@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:26:27 by ataboada          #+#    #+#             */
-/*   Updated: 2024/06/03 18:32:28 by ataboada         ###   ########.fr       */
+/*   Updated: 2024/06/07 16:20:08 by ataboada         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 
 # include "../libft/libft.h"
 # include "maths.h"
+# include "mlx_utils.h"
 
 // --------------------------------- ENUMS -------------------------------------
 
@@ -211,47 +212,26 @@ typedef struct s_image
 	char			*addr;
 }	t_image;
 
-typedef struct s_ui
-{
-	void			**li;
-	int				n_li;
-	void			**sp;
-	int				n_sp;
-	void			**pl;
-	int				n_pl;
-	void			**cy;
-	int				n_cy;
-	void			**co;
-	int				n_co;
-	void			**cb;
-	int				n_cb;
-	void			**tr;
-	int				n_tr;
-	int				flags;
-}	t_ui;
-
 typedef struct s_world
 {
+	int				width;
+	int				height;
 	t_amb			ambient;
 	t_camera		*camera;
 	t_list			*lights;
 	t_list			*objects;
+	void			*mlx;
+	void			*win;
+	t_image			img;
+	t_image			img2;
+	t_ui			ui;
+	int				status_key;
+	int				i[7];
 	t_point			cam_coords;
 	t_vec3			cam_orient;
 	double			cam_fov;
 	t_matrix		cam_reset;
-	int				width;
-	int				height;
-	void			*mlx;
-	void			*win;
-	t_image			img;
-	t_ui			ui;
-	int				i[7];
-	int				status_key;
 	char			*line;
-	int				oflag;
-	int				lflag;
-	int				rflag;
 }	t_world;
 
 typedef struct s_aux

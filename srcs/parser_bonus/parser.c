@@ -6,7 +6,7 @@
 /*   By: ataboada <ataboada@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 21:32:00 by ataboada          #+#    #+#             */
-/*   Updated: 2024/05/30 17:07:11 by ataboada         ###   ########.fr       */
+/*   Updated: 2024/06/13 13:59:03 by ataboada         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,24 +16,23 @@ void	ft_parser(char *filename, t_world *w)
 {
 	int		fd;
 	int		count;
-	char	*line;
 
 	count = 0;
 	if (ft_strncmp(filename + ft_strlen(filename) - 3, ".rt", 3))
-		ft_perror(w, "Invalid file extension");
+		ft_perror(w, NULL, "Invalid file extension");
 	fd = open(filename, O_RDONLY);
 	if (fd < 0)
-		ft_perror(w, NULL);
-	line = get_next_line(fd, 0);
-	while (line)
+		ft_perror(w, NULL, NULL);
+	w->line = get_next_line(fd, 0);
+	while (w->line)
 	{
-		if (*line != '\n' && *line != '#' && *line != '\0')
-			ft_read_line(line, w, &count);
-		free(line);
-		line = get_next_line(fd, 0);
+		if (*w->line != '\n' && *w->line != '#' && *w->line != '\0')
+			ft_read_line(w->line, w, &count);
+		free(w->line);
+		w->line = get_next_line(fd, 0);
 	}
 	if (count < 3)
-		ft_perror(w, "Missing elements");
+		ft_perror(w, NULL, "Missing elements");
 	close(fd);
 }
 
@@ -62,5 +61,5 @@ void	ft_read_line(char *line, t_world *w, int *count)
 	else if (*line == 'c' && *(line + 1) == 'b')
 		ft_get_cube(line, w);
 	else
-		ft_perror(w, "Invalid identifier");
+		ft_perror(w, NULL, "Invalid identifier");
 }

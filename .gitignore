@@ -1,0 +1,9 @@
+miniRT
+miniRT_bonus
+/.idea/
+**/.build/
+**/libft/.objs/
+**/libft/libft.a
+/.objs/
+gmon.out
+analysis.txt

@@ -6,7 +6,7 @@
 /*   By: ataboada <ataboada@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 11:56:01 by ataboada          #+#    #+#             */
-/*   Updated: 2024/05/30 17:29:28 by ataboada         ###   ########.fr       */
+/*   Updated: 2024/06/13 13:59:53 by ataboada         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,30 +59,30 @@ t_matrix	ft_get_rotate(t_vec3 orien)
 	return (rotate);
 }
 
-void	ft_get_texture(t_world *w, t_shapes *s, char **line)
+void	ft_get_texture(t_world *w, t_shapes *s, char **l)
 {
 	t_color	color_a;
 	t_color	color_b;
 	char	type;
 
-	while (**line == ' ')
-		(*line)++;
-	if (ft_isdigit(**line))
-		s->material.color = ft_get_tuple(w, line, 3);
-	else if (**line == 'S' || **line == 'G' || **line == 'R' || **line == 'C')
+	while (**l == ' ')
+		(*l)++;
+	if (ft_isdigit(**l))
+		s->material.color = ft_get_tuple(w, s, l, 3);
+	else if (**l == 'S' || **l == 'G' || **l == 'R' || **l == 'C')
 	{
-		type = **line;
-		(*line)++;
-		color_a = ft_get_tuple(w, line, 3);
-		color_b = ft_get_tuple(w, line, 3);
+		type = **l;
+		(*l)++;
+		color_a = ft_get_tuple(w, s, l, 3);
+		color_b = ft_get_tuple(w, s, l, 3);
 		s->material.pattern = ft_create_pattern(type, color_a, color_b);
 	}
 	else
-		s->material.pattern = ft_create_xpm_pattern(XPM, ft_get_xpm(w, line));
-	ft_get_optics(w, s, line);
+		s->material.pattern = ft_create_xpm_pattern(XPM, ft_get_xpm(w, s, l));
+	ft_get_optics(w, s, l);
 }
 
-char	*ft_get_xpm(t_world *w, char **line)
+char	*ft_get_xpm(t_world *w, t_shapes *s, char **line)
 {
 	char	*file;
 	int		i;
@@ -91,13 +91,16 @@ char	*ft_get_xpm(t_world *w, char **line)
 	while (**line == ' ')
 		(*line)++;
 	if (**line != '"')
-		ft_perror(w, "Invalid texture path");
+		ft_perror(w, s, "Invalid texture path");
 	(*line)++;
 	while ((*line)[i] != '"')
 		i++;
 	file = ft_substr(*line, 0, i);
 	if (ft_strncmp(file + ft_strlen(file) - 4, ".xpm", 4))
-		ft_perror(w, "Invalid texture file extension");
+	{
+		free(file);
+		ft_perror(w, s, "Invalid texture file extension");
+	}
 	*line += i + 1;
 	return (file);
 }
@@ -109,12 +112,12 @@ void	ft_get_optics(t_world *w, t_shapes *s, char **line)
 	if (**line == 'R' && *(*line + 1) == 'E')
 	{
 		(*line) += 2;
-		s->material.reflective = ft_get_double(w, line, ' ');
+		s->material.reflective = ft_get_double(w, s, line, ' ');
 	}
 	else if (**line == 'R' && *(*line + 1) == 'A')
 	{
 		(*line) += 2;
-		s->material.transparency = ft_get_double(w, line, ' ');
-		s->material.refractive_index = ft_get_double(w, line, ' ');
+		s->material.transparency = ft_get_double(w, s, line, ' ');
+		s->material.refractive_index = ft_get_double(w, s, line, ' ');
 	}
 }

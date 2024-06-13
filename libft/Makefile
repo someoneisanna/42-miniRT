@@ -22,7 +22,8 @@ SRCS = ft_isalpha.c ft_isdigit.c ft_isalnum.c ft_isascii.c ft_isprint.c \
 		ft_lstclear_bonus.c ft_lstiter_bonus.c ft_lstmap_bonus.c \
 		printf/ft_print_c.c printf/ft_printf.c printf/ft_print_n.c \
 		printf/ft_print_p.c printf/ft_print_s.c printf/ft_print_u.c \
-		printf/ft_print_x.c gnl/get_next_line_bonus.c gnl/get_next_line_utils_bonus.c \
+		printf/ft_print_x.c \
+		gnl/get_next_line_bonus.c gnl/get_next_line_utils_bonus.c \
 		ft_swap.c ft_strcmp.c ft_isspace.c
 
 OBJS = $(SRCS:%.c=$(OBJS_DIR)/%.o)

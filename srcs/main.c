@@ -6,7 +6,7 @@
 /*   By: ataboada <ataboada@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 16:43:54 by ataboada          #+#    #+#             */
-/*   Updated: 2024/05/30 17:08:08 by ataboada         ###   ########.fr       */
+/*   Updated: 2024/06/07 11:19:52 by ataboada         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,16 +17,14 @@ int	main(int ac, char **av)
 	t_world	w;
 
 	if (ac != 2)
-		ft_perror(NULL, "Invalid number of arguments");
+		ft_perror(NULL, NULL, "Invalid number of arguments");
 	ft_bzero(&w, sizeof(t_world));
 	w.width = WIDTH;
 	w.height = WIDTH / RATIO;
 	ft_parser(av[1], &w);
 	ft_open_window(&w);
 	ft_render(w.camera, &w);
-	mlx_do_key_autorepeatoff(w.mlx);
-	mlx_hook(w.win, KeyPress, KeyPressMask, ft_button_press, &w);
-	mlx_hook(w.win, DestroyNotify, ButtonPressMask, ft_close, &w);
+	ft_set_hooks(&w);
 	mlx_put_image_to_window(w.mlx, w.win, w.img.img, 0, 0);
 	mlx_loop(w.mlx);
 }

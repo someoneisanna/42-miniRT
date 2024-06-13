@@ -6,16 +6,11 @@
 /*   By: ataboada <ataboada@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 12:40:24 by ataboada          #+#    #+#             */
-/*   Updated: 2024/05/30 16:41:06 by ataboada         ###   ########.fr       */
+/*   Updated: 2024/06/10 14:28:09 by ataboada         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line_bonus.h"
-
-char	*get_next_line(int fd, int stop);
-char	*gnl_read_file(int fd, char *storage, int stop);
-char	*gnl_get_current_line(char *storage);
-char	*gnl_update_storage(char *storage);
 
 char	*get_next_line(int fd, int stop)
 {
@@ -24,16 +19,12 @@ char	*get_next_line(int fd, int stop)
 
 	if (stop)
 	{
-		for	(int i = 0; i < MAX_O; i++)
-		{
-			if (storage[i])
-				free(storage[i]);
-		}
+		gnl_extra_free(storage);
 		return (NULL);
 	}
 	if (fd < 0 || BUFFER_SIZE < 1 || fd > MAX_O)
 		return (NULL);
-	storage[fd] = gnl_read_file(fd, storage[fd], stop);
+	storage[fd] = gnl_read_file(fd, storage[fd]);
 	if (!storage[fd])
 		return (NULL);
 	line = gnl_get_current_line(storage[fd]);
@@ -46,7 +37,7 @@ char	*get_next_line(int fd, int stop)
 	return (line);
 }
 
-char	*gnl_read_file(int fd, char *storage, int stop)
+char	*gnl_read_file(int fd, char *storage)
 {
 	char	*buffer;
 	int		bytes_read;
@@ -60,7 +51,7 @@ char	*gnl_read_file(int fd, char *storage, int stop)
 		bytes_read = read(fd, buffer, BUFFER_SIZE);
 		if (bytes_read == 0)
 			break ;
-		if (bytes_read == -1 || stop == 1)
+		if (bytes_read == -1)
 		{
 			if (storage)
 				free(storage);
@@ -104,4 +95,17 @@ char	*gnl_update_storage(char *storage)
 		return (NULL);
 	free(storage);
 	return (upd_storage);
+}
+
+void	gnl_extra_free(char **storage)
+{
+	int	i;
+
+	i = 0;
+	while (i < MAX_O)
+	{
+		if (storage[i])
+			free(storage[i]);
+		i++;
+	}
 }

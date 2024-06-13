@@ -6,7 +6,7 @@
 /*   By: ataboada <ataboada@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:26:03 by ataboada          #+#    #+#             */
-/*   Updated: 2024/05/30 17:29:24 by ataboada         ###   ########.fr       */
+/*   Updated: 2024/06/12 17:17:30 by ataboada         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,10 +49,10 @@ void		ft_get_sphere(char *line, t_world *w);
 void		ft_get_plane(char *line, t_world *w);
 void		ft_get_cylinder(char *line, t_world *w);
 
-void		ft_perror(t_world *w, char *msg);
-double		ft_atof(t_world *w, char *s);
-double		ft_get_double(t_world *w, char **line, char d);
-t_point		ft_get_tuple(t_world *world, char **line, double w);
+void		ft_perror(t_world *w, t_shapes *s, char *msg);
+double		ft_atof(t_world *w, t_shapes *s, char *str);
+double		ft_get_double(t_world *w, t_shapes *s, char **line, char d);
+t_point		ft_get_tuple(t_world *world, t_shapes *s, char **line, double w);
 bool		ft_in_range(t_vec3 v, double min, double max);
 
 void		ft_get_transform(t_shapes *s, t_point c, t_vec3 o, double d);
@@ -73,8 +73,8 @@ void		ft_calculate_refracted_indices(t_comps *c, t_intrs **xs, t_intr *h);
 void		ft_set_refracted_index(char n, t_comps *c, t_list *containers);
 
 t_color		ft_shade_hit(t_world *w, t_comps *c, t_material m, int remaining);
-
 bool		ft_is_shadowed(t_world *w, t_light *light, t_point point);
+
 t_color		ft_lighting(t_comps *c, t_light *l, bool in_shadow);
 t_color		ft_get_diffuse(t_comps *c, t_color effective_color, t_vec3 lightv);
 t_color		ft_get_specular(t_comps *c, t_light *l, t_vec3 lightv);
@@ -125,6 +125,8 @@ void		ft_load_xpm_to_matrix(t_canvas *texture, char *xpm_file);
 t_canvas	ft_read_xpm(char *xpm_file);
 t_pattern	ft_create_xpm_pattern(int pattern_type, char *xpm_file);
 t_color		ft_xpm_at(t_pattern pattern, t_point point);
+t_color		ft_xpm_at_sphere(t_pattern pattern, t_point point);
+t_color		ft_xpm_at_plane(t_pattern pattern, t_point point);
 
 // UTILS _______________________________________________________________________
 
@@ -145,15 +147,23 @@ void		ft_lst_remove(t_list **lst, t_shapes *shape);
 t_list		*ft_lst_last(t_list *lst);
 void		ft_free_lst(t_list **lst);
 
+int			ft_clamp(int value, int min, int max);
+int			ft_int_to_rgb(t_color color);
+t_color		ft_rgb_to_int(int color);
+void		ft_free_all_allocated_memory(t_world *w);
+
 // BONUS _______________________________________________________________________
 
+void		ft_set_camera(t_world *w);
+
 void		ft_get_resolution(char *line, t_world *w);
+
 void		ft_get_cone(char *line, t_world *w);
 void		ft_get_cube(char *line, t_world *w);
 void		ft_get_triangle(char *line, t_world *w);
 
 void		ft_get_texture(t_world *w, t_shapes *s, char **line);
-char		*ft_get_xpm(t_world *w, char **line);
+char		*ft_get_xpm(t_world *w, t_shapes *s, char **line);
 void		ft_get_optics(t_world *w, t_shapes *s, char **line);
 
 void		ft_render_threads(t_camera *c, t_world *w);

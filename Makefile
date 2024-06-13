@@ -33,8 +33,6 @@ SRCS		= math/vector_operations_1 \
 				math/matrix_operations \
 				math/matrix_transformations \
 				math/matrix_aux \
-				mlx/mlx_window \
-				mlx/mlx_utils \
 				render/render \
 				render/world_intersections \
 				render/computations \
@@ -51,6 +49,7 @@ SRCS		= math/vector_operations_1 \
 				textures/xpm_textures \
 				textures/pattern \
 				textures/pattern_functions \
+				utils/mlx_utils \
 				utils/create_camera \
 				utils/create_canvas \
 				utils/create_intersection \
@@ -63,7 +62,8 @@ MANDATORY	= main \
 				parser/get_objects \
 				parser/get_objects_utils \
 				parser/parser_utils \
-				mlx/mlx_hooks \
+				mlx/mlx \
+				mlx/mlx_update \
 				$(SRCS)
 				
 BONUS		= main_bonus \
@@ -73,9 +73,14 @@ BONUS		= main_bonus \
 				parser_bonus/get_objects_utils \
 				parser_bonus/parser_utils \
 				render/render_bonus \
-				mlx_bonus/ui_struct \
+				mlx_bonus/ui_init_0 \
+				mlx_bonus/ui_init_1 \
+				mlx_bonus/ui_interactions_0 \
+				mlx_bonus/ui_interactions_1 \
+				mlx_bonus/mlx \
 				mlx_bonus/mlx_hooks \
 				mlx_bonus/mlx_update \
+				mlx_bonus/mlx_update_elements \
 				$(SRCS)
 
 MANDATORY	:= $(MANDATORY:%=$(SRCS_DIR)/%.c)
@@ -135,13 +140,14 @@ re: fclean all
 
 re_bonus: fclean bonus
 
+
+.PHONY: all bonus clean fclean re re_bonus download mgmon bgmon valgrind
+
+# --------------------------------- ADDITIONAL ---------------------------------
+
 download:
 	wget https://cdn.intra.42.fr/document/document/22621/minilibx-linux.tgz && \
 	tar -xf minilibx-linux.tgz && rm -rf minilibx-linux.tgz
-
-.PHONY: all bonus clean fclean re re_bonus download
-
-# --------------------------------- ADDITIONAL ---------------------------------
 
 mgmon: all
 	./$(M_NAME) scenes/ab_mandatory.rt

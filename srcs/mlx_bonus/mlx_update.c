@@ -6,7 +6,7 @@
 /*   By: ataboada <ataboada@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 21:46:26 by ataboada          #+#    #+#             */
-/*   Updated: 2024/06/03 18:32:43 by ataboada         ###   ########.fr       */
+/*   Updated: 2024/06/12 14:55:56 by ataboada         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,32 +19,21 @@ int	ft_update(void *ptr)
 	w = (t_world *)ptr;
 	if (w->status_key != 0)
 	{
+		mlx_destroy_image(w->mlx, w->img.img);
 		w->img.img = mlx_new_image(w->mlx, w->camera->hsize, w->camera->vsize);
 		w->img.addr = mlx_get_data_addr(w->img.img, &w->img.bpp,
 				&w->img.line_length, &w->img.endian);
 		ft_update_helper(w, w->status_key);
 		ft_render_threads(w->camera, w);
-		mlx_put_image_to_window(w->mlx, w->win, w->img.img, 0, 0);
+		mlx_put_image_to_window(w->mlx, w->win, w->img.img, (w->ui.begin
+				- w->width) / 2, (UI_WIN_WIDTH / RATIO - w->height) / 2);
 	}
 	return (0);
 }
 
 void	ft_update_helper(t_world *w, int key)
 {
-	t_shapes	*s;
-	t_light		*l;
-
-	s = (t_shapes *)w->objects->next->content;
-	l = (t_light *)w->lights->content;
-	if (w->oflag == 1)
-	{
-		s->transform = ft_update_shapes(s->transform, key);
-		s->inverted = ft_invert_matrix(s->transform);
-		s->transposed = ft_transpose_matrix(s->inverted);
-	}
-	else if (w->lflag == 1)
-		ft_update_lights(l, key);
-	else if (w->oflag == 0 && w->lflag == 0)
+	if (w->ui.flags == 2)
 	{
 		if (w->status_key != Z)
 			w->camera->transform = ft_update_camera(w->camera->transform, key);
@@ -52,82 +41,30 @@ void	ft_update_helper(t_world *w, int key)
 			w->camera->transform = w->cam_reset;
 		w->camera->inverted = ft_invert_matrix(w->camera->transform);
 	}
+	else if (w->ui.flags == 4)
+		ft_update_lights(w, key);
+	else if (w->ui.flags >= 8)
+		ft_update_object(w, key);
 }
 
-t_matrix	ft_update_camera(t_matrix t, int key)
+void	ft_update_object(t_world *w, int key)
 {
-	if (key == W)
-		t = ft_multiply_matrix(t, ft_rotation_matrix('x', M_PI / 18));
-	else if (key == S)
-		t = ft_multiply_matrix(t, ft_rotation_matrix('x', -M_PI / 18));
-	else if (key == A)
-		t = ft_multiply_matrix(t, ft_rotation_matrix('y', M_PI / 18));
-	else if (key == D)
-		t = ft_multiply_matrix(t, ft_rotation_matrix('y', -M_PI / 18));
-	else if (key == UP)
-		t = ft_multiply_matrix(t, ft_translation_matrix(0, -1, 0));
-	else if (key == DOWN)
-		t = ft_multiply_matrix(t, ft_translation_matrix(0, 1, 0));
-	else if (key == LEFT)
-		t = ft_multiply_matrix(t, ft_translation_matrix(1, 0, 0));
-	else if (key == RIGHT)
-		t = ft_multiply_matrix(t, ft_translation_matrix(-1, 0, 0));
-	else if (key == SPACE)
-		t = ft_multiply_matrix(t, ft_translation_matrix(0, 0, -1));
-	else if (key == ALT)
-		t = ft_multiply_matrix(t, ft_translation_matrix(0, 0, 1));
-	else if (key == PLUS)
-		t = ft_multiply_matrix(t, ft_scaling_matrix(1.3, 1.3, 1.3));
-	else if (key == MINUS)
-		t = ft_multiply_matrix(t, ft_scaling_matrix(0.7, 0.7, 0.7));
-	return (t);
-}
+	t_shapes	*s;
 
-t_matrix	ft_update_shapes(t_matrix t, int key)
-{
-	if (key == W)
-		t = ft_multiply_matrix(t, ft_rotation_matrix('x', -M_PI / 18));
-	else if (key == S)
-		t = ft_multiply_matrix(t, ft_rotation_matrix('x', M_PI / 18));
-	else if (key == A)
-		t = ft_multiply_matrix(t, ft_rotation_matrix('y', -M_PI / 18));
-	else if (key == D)
-		t = ft_multiply_matrix(t, ft_rotation_matrix('y', M_PI / 18));
-	else if (key == UP)
-		t = ft_multiply_matrix(t, ft_translation_matrix(0, 1, 0));
-	else if (key == DOWN)
-		t = ft_multiply_matrix(t, ft_translation_matrix(0, -1, 0));
-	else if (key == LEFT)
-		t = ft_multiply_matrix(t, ft_translation_matrix(-1, 0, 0));
-	else if (key == RIGHT)
-		t = ft_multiply_matrix(t, ft_translation_matrix(1, 0, 0));
-	else if (key == ALT)
-		t = ft_multiply_matrix(t, ft_translation_matrix(0, 0, 1));
-	else if (key == SPACE)
-		t = ft_multiply_matrix(t, ft_translation_matrix(0, 0, -1));
-	else if (key == PLUS)
-		t = ft_multiply_matrix(t, ft_scaling_matrix(1.3, 1.3, 1.3));
-	else if (key == MINUS)
-		t = ft_multiply_matrix(t, ft_scaling_matrix(0.7, 0.7, 0.7));
-	return (t);
-}
-
-void	ft_update_lights(t_light *l, int key)
-{
-	if (key == UP)
-		l->coordinates = ft_op(l->coordinates, '+', (t_point){0, -1, 0, 1});
-	else if (key == DOWN)
-		l->coordinates = ft_op(l->coordinates, '+', (t_point){0, 1, 0, 1});
-	else if (key == LEFT)
-		l->coordinates = ft_op(l->coordinates, '+', (t_point){-1, 0, 0, 1});
-	else if (key == RIGHT)
-		l->coordinates = ft_op(l->coordinates, '+', (t_point){1, 0, 0, 1});
-	else if (key == ALT)
-		l->coordinates = ft_op(l->coordinates, '+', (t_point){0, 0, 1, 1});
-	else if (key == SPACE)
-		l->coordinates = ft_op(l->coordinates, '+', (t_point){0, 0, -1, 1});
-	else if (key == PLUS)
-		l->intensity = ft_ops(l->intensity, '*', 1.3);
-	else if (key == MINUS)
-		l->intensity = ft_ops(l->intensity, '*', 0.7);
+	s = NULL;
+	if (w->ui.flags == 8)
+		s = (t_shapes *)w->ui.sp[w->ui.tflag % w->ui.n_objs[0]];
+	else if (w->ui.flags == 16)
+		s = (t_shapes *)w->ui.pl[w->ui.tflag % w->ui.n_objs[1]];
+	else if (w->ui.flags == 32)
+		s = (t_shapes *)w->ui.cy[w->ui.tflag % w->ui.n_objs[2]];
+	else if (w->ui.flags == 64)
+		s = (t_shapes *)w->ui.co[w->ui.tflag % w->ui.n_objs[3]];
+	else if (w->ui.flags == 128)
+		s = (t_shapes *)w->ui.cb[w->ui.tflag % w->ui.n_objs[4]];
+	else if (w->ui.flags == 256)
+		s = (t_shapes *)w->ui.tr[w->ui.tflag % w->ui.n_objs[5]];
+	s->transform = ft_update_shapes(s->transform, key);
+	s->inverted = ft_invert_matrix(s->transform);
+	s->transposed = ft_transpose_matrix(s->inverted);
 }

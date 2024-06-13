@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line_bonus.h                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mamaral- <mamaral-@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: ataboada <ataboada@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/12 12:42:01 by ataboada          #+#    #+#             */
-/*   Updated: 2024/05/23 16:03:04 by mamaral-         ###   ########.fr       */
+/*   Updated: 2024/06/10 14:28:41 by ataboada         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +31,10 @@
 // ---------------------------------- PROTOTYPES -------------------------------
 
 char	*get_next_line(int fd, int stop);
-char	*gnl_read_file(int fd, char *storage, int stop);
+char	*gnl_read_file(int fd, char *storage);
 char	*gnl_get_current_line(char *storage);
 char	*gnl_update_storage(char *storage);
+void	gnl_extra_free(char **storage);
 
 size_t	gnl_strclen(const char *str, int c);
 char	*gnl_strchr(const char *str, int c);
