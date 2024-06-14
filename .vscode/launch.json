@@ -5,7 +5,7 @@
       "name": "C/C++ Runner: Debug Session",
       "type": "cppdbg",
       "request": "launch",
-      "args": [ "scenes/all.rt" ],
+      "args": [ "scenes/ab_texture.rt" ],
       "stopAtEntry": false,
       "externalConsole": false,
       "cwd": "${workspaceFolder}",
