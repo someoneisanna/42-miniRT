@@ -6,7 +6,7 @@
 /*   By: ataboada <ataboada@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 21:34:45 by ataboada          #+#    #+#             */
-/*   Updated: 2024/06/07 15:06:43 by ataboada         ###   ########.fr       */
+/*   Updated: 2024/06/16 16:59:05 by ataboada         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ void	ft_get_cylinder(char *line, t_world *w)
 		ft_perror(w, s, "Cylinder orientation is out of range");
 	s->cylinder.diameter = ft_get_double(w, s, &line, ' ');
 	s->cylinder.height = ft_get_double(w, s, &line, ' ');
-	if (s->cylinder.diameter < 0 || s->cylinder.height < 0)
+	if (s->cylinder.diameter <= 0 || s->cylinder.height <= 0)
 		ft_perror(w, s, "Cylinder diameter and/or height are not valid");
 	ft_get_texture(w, s, &line);
 	s->material.ambient = ft_ops(w->ambient.color, '*', w->ambient.ratio);
@@ -84,7 +84,7 @@ void	ft_get_cone(char *line, t_world *w)
 	if (ft_in_range(s->cone.orientation, -1, 1) == false)
 		ft_perror(w, s, "Cone orientation is out of range");
 	s->cone.diameter = ft_get_double(w, s, &line, ' ');
-	if (s->cone.diameter < 0)
+	if (s->cone.diameter <= 0)
 		ft_perror(w, s, "Cone diameter is not valid");
 	ft_get_texture(w, s, &line);
 	s->material.ambient = ft_ops(w->ambient.color, '*', w->ambient.ratio);
@@ -105,8 +105,10 @@ void	ft_get_cube(char *line, t_world *w)
 	s = ft_create_shape(CUBE);
 	s->cube.coordinates = ft_get_tuple(w, s, &line, 1);
 	s->cube.orientation = ft_get_tuple(w, s, &line, 0);
+	if (ft_in_range(s->cube.orientation, -1, 1) == false)
+		ft_perror(w, s, "Cube orientation is out of range");
 	s->cube.size = ft_get_double(w, s, &line, ' ');
-	if (s->cube.size < 0)
+	if (s->cube.size <= 0)
 		ft_perror(w, s, "Cube size is not valid");
 	ft_get_texture(w, s, &line);
 	s->material.ambient = ft_ops(w->ambient.color, '*', w->ambient.ratio);

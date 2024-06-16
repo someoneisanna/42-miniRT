@@ -6,7 +6,7 @@
 /*   By: ataboada <ataboada@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 11:56:01 by ataboada          #+#    #+#             */
-/*   Updated: 2024/06/16 11:56:49 by ataboada         ###   ########.fr       */
+/*   Updated: 2024/06/16 17:38:57 by ataboada         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ void	ft_get_texture(t_world *w, t_shapes *s, char **l)
 
 	while (**l == ' ')
 		(*l)++;
-	if (ft_isdigit(**l))
+	if (ft_isdigit(**l) || **l == '-' || **l == '+')
 		s->material.color = ft_get_tuple(w, s, l, 3);
 	else if (**l == 'S' || **l == 'G' || **l == 'R' || **l == 'C')
 	{
@@ -115,11 +115,17 @@ void	ft_get_optics(t_world *w, t_shapes *s, char **line)
 	{
 		(*line) += 2;
 		s->material.reflective = ft_get_double(w, s, line, ' ');
+		if (s->material.reflective < 0 || s->material.reflective > 1)
+			ft_perror(w, s, "Invalid reflectivity value");
 	}
 	else if (**line == 'R' && *(*line + 1) == 'A')
 	{
 		(*line) += 2;
 		s->material.transparency = ft_get_double(w, s, line, ' ');
+		if (s->material.transparency < 0 || s->material.transparency > 1)
+			ft_perror(w, s, "Invalid transparency value");
 		s->material.refractive_index = ft_get_double(w, s, line, ' ');
+		if (s->material.refractive_index < 1)
+			ft_perror(w, s, "Invalid refractive index value");
 	}
 }

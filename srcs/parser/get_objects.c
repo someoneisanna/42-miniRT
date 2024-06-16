@@ -6,7 +6,7 @@
 /*   By: ataboada <ataboada@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 21:34:45 by ataboada          #+#    #+#             */
-/*   Updated: 2024/06/06 15:46:18 by ataboada         ###   ########.fr       */
+/*   Updated: 2024/06/16 16:56:56 by ataboada         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ void	ft_get_cylinder(char *line, t_world *w)
 		ft_perror(w, s, "Cylinder orientation is out of range");
 	s->cylinder.diameter = ft_get_double(w, s, &line, ' ');
 	s->cylinder.height = ft_get_double(w, s, &line, ' ');
-	if (s->cylinder.diameter < 0 || s->cylinder.height < 0)
+	if (s->cylinder.diameter <= 0 || s->cylinder.height <= 0)
 		ft_perror(w, s, "Cylinder diameter and/or height are not valid");
 	s->material.color = ft_get_tuple(w, s, &line, 3);
 	s->material.ambient = ft_ops(w->ambient.color, '*', w->ambient.ratio);

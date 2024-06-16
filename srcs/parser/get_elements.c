@@ -6,7 +6,7 @@
 /*   By: ataboada <ataboada@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 21:33:49 by ataboada          #+#    #+#             */
-/*   Updated: 2024/06/06 15:03:33 by ataboada         ###   ########.fr       */
+/*   Updated: 2024/06/16 12:43:08 by ataboada         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ int	ft_get_camera(char *line, t_world *w)
 	orientation = ft_get_tuple(w, NULL, &line, 0);
 	if (ft_in_range(orientation, -1, 1) == false)
 		ft_perror(w, NULL, "Camera orientation is not valid");
-	fov = ft_atof(w, NULL, line);
+	fov = ft_get_double(w, NULL, &line, ' ');
 	if (fov < 0 || fov > 180)
 		ft_perror(w, NULL, "Camera fov is not valid");
 	w->camera = ft_create_camera(w->width, w->height, fov * DEG2RAD);

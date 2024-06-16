@@ -6,7 +6,7 @@
 /*   By: ataboada <ataboada@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 21:33:49 by ataboada          #+#    #+#             */
-/*   Updated: 2024/06/07 15:06:34 by ataboada         ###   ########.fr       */
+/*   Updated: 2024/06/16 17:08:24 by ataboada         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,9 +92,9 @@ void	ft_get_triangle(char *line, t_world *w)
 	line += 2;
 	w->ui.n_objs[5]++;
 	s = ft_create_shape(TRIANGLE);
-	s->triangle.p1 = ft_get_tuple(w, NULL, &line, 1);
-	s->triangle.p2 = ft_get_tuple(w, NULL, &line, 1);
-	s->triangle.p3 = ft_get_tuple(w, NULL, &line, 1);
+	s->triangle.p1 = ft_get_tuple(w, s, &line, 1);
+	s->triangle.p2 = ft_get_tuple(w, s, &line, 1);
+	s->triangle.p3 = ft_get_tuple(w, s, &line, 1);
 	s->triangle.e1 = ft_op(s->triangle.p2, '-', s->triangle.p1);
 	s->triangle.e2 = ft_op(s->triangle.p3, '-', s->triangle.p1);
 	s->triangle.normal = ft_normalize(ft_cross(s->triangle.e2, s->triangle.e1));
