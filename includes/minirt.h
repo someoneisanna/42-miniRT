@@ -6,7 +6,7 @@
 /*   By: ataboada <ataboada@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:26:03 by ataboada          #+#    #+#             */
-/*   Updated: 2024/06/13 16:35:54 by ataboada         ###   ########.fr       */
+/*   Updated: 2024/06/16 12:08:37 by ataboada         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,9 +121,9 @@ t_color		ft_ring_at(t_pattern pattern, int shape_type, t_point point);
 t_color		ft_checkers_at(t_pattern pattern, int shape_type, t_point point);
 t_uv		ft_cartesian_to_spherical(t_point point);
 
-void		ft_load_xpm_to_matrix(t_canvas *texture, char *xpm_file);
-t_canvas	ft_read_xpm(char *xpm_file);
-t_pattern	ft_create_xpm_pattern(int pattern_type, char *xpm_file);
+t_pattern	ft_create_xpm_pat(t_world *w, t_shapes *s, int type, char *file);
+t_canvas	ft_read_xpm(t_world *w, t_shapes *s, char *file);
+void		ft_load_xpm(t_canvas scene, t_image img_ptr, void *mlx_ptr);
 t_color		ft_xpm_at(t_pattern pattern, t_point point);
 t_color		ft_xpm_at_shape(int shape_type, t_pattern pattern, t_point point);
 

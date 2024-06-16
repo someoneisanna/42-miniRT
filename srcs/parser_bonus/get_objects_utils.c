@@ -6,7 +6,7 @@
 /*   By: ataboada <ataboada@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 11:56:01 by ataboada          #+#    #+#             */
-/*   Updated: 2024/06/13 13:59:53 by ataboada         ###   ########.fr       */
+/*   Updated: 2024/06/16 11:56:49 by ataboada         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,13 +78,13 @@ void	ft_get_texture(t_world *w, t_shapes *s, char **l)
 		s->material.pattern = ft_create_pattern(type, color_a, color_b);
 	}
 	else
-		s->material.pattern = ft_create_xpm_pattern(XPM, ft_get_xpm(w, s, l));
+		s->material.pattern = ft_create_xpm_pat(w, s, XPM, ft_get_xpm(w, s, l));
 	ft_get_optics(w, s, l);
 }
 
 char	*ft_get_xpm(t_world *w, t_shapes *s, char **line)
 {
-	char	*file;
+	char	*f;
 	int		i;
 
 	i = 0;
@@ -93,16 +93,18 @@ char	*ft_get_xpm(t_world *w, t_shapes *s, char **line)
 	if (**line != '"')
 		ft_perror(w, s, "Invalid texture path");
 	(*line)++;
+	if (!ft_strchr(*line, '"'))
+		ft_perror(w, s, "Invalid texture path");
 	while ((*line)[i] != '"')
 		i++;
-	file = ft_substr(*line, 0, i);
-	if (ft_strncmp(file + ft_strlen(file) - 4, ".xpm", 4))
+	f = ft_substr(*line, 0, i);
+	if (ft_strlen(f) < 5 || ft_strncmp(f + ft_strlen(f) - 4, ".xpm", 4))
 	{
-		free(file);
+		free(f);
 		ft_perror(w, s, "Invalid texture file extension");
 	}
 	*line += i + 1;
-	return (file);
+	return (f);
 }
 
 void	ft_get_optics(t_world *w, t_shapes *s, char **line)

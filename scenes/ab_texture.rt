@@ -4,9 +4,9 @@ C   0,5,-15   0,0,1   50
 
 L   0,5,-10     +1     255,255,255
 
-R   500  1
+R   50  1
 
-pl  0,-1,0   0,0,0  "textures/brick_clr.xpm"
+pl  0,-1,0   0,0,0    "textures/wall.xpm"
 
 sp  0,4,0     3      "textures/wall.xpm"
 

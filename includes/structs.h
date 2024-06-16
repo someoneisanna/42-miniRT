@@ -6,7 +6,7 @@
 /*   By: ataboada <ataboada@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:26:27 by ataboada          #+#    #+#             */
-/*   Updated: 2024/06/07 16:20:08 by ataboada         ###   ########.fr       */
+/*   Updated: 2024/06/16 11:57:08 by ataboada         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,6 @@ enum e_type
 
 enum e_pattern
 {
-	TEST,
 	NONE,
 	STRIPES,
 	GRADIENT,

@@ -6,7 +6,7 @@
 /*   By: ataboada <ataboada@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 19:35:48 by ataboada          #+#    #+#             */
-/*   Updated: 2024/06/13 15:41:02 by ataboada         ###   ########.fr       */
+/*   Updated: 2024/06/14 17:06:19 by ataboada         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 void	ft_set_hooks(t_world *w)
 {
+	mlx_do_key_autorepeatoff(w->mlx);
 	mlx_hook(w->win, KeyPress, KeyPressMask, ft_button_press, w);
 	mlx_hook(w->win, KeyRelease, KeyReleaseMask, ft_button_release, w);
 	mlx_hook(w->win, DestroyNotify, ButtonPressMask, ft_close, w);
@@ -46,6 +47,7 @@ int	ft_button_release(int k, t_world *img)
 
 int	ft_close(t_world *w)
 {
+	mlx_do_key_autorepeaton(w->mlx);
 	mlx_destroy_image(w->mlx, w->img.img);
 	mlx_destroy_image(w->mlx, w->img2.img);
 	mlx_destroy_window(w->mlx, w->win);
