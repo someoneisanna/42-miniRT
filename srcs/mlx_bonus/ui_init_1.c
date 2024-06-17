@@ -6,7 +6,7 @@
 /*   By: ataboada <ataboada@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 15:19:55 by ataboada          #+#    #+#             */
-/*   Updated: 2024/06/07 15:49:35 by ataboada         ###   ########.fr       */
+/*   Updated: 2024/06/17 17:53:48 by ataboada         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,8 @@ void	ft_set_ranges(t_world *w)
 
 void	ft_set_themes(t_world *w)
 {
+	int		index;
+
 	w->ui.themes[0][0] = 0x008080;
 	w->ui.themes[0][1] = 0xff0000;
 	w->ui.themes[0][2] = 0x000000;
@@ -67,12 +69,9 @@ void	ft_set_themes(t_world *w)
 	w->ui.themes[1][3] = 0xffa705;
 	w->ui.themes[1][4] = 0x0c5ef5;
 	w->ui.themes[1][5] = 0x0cf1f5;
-	w->ui.theme[0] = w->ui.themes[0][0];
-	w->ui.theme[1] = w->ui.themes[0][1];
-	w->ui.theme[2] = w->ui.themes[0][2];
-	w->ui.theme[3] = w->ui.themes[0][3];
-	w->ui.theme[4] = w->ui.themes[0][4];
-	w->ui.theme[5] = w->ui.themes[0][5];
+	index = -1;
+	while (++index < 6)
+		w->ui.theme[index] = w->ui.themes[0][index];
 }
 
 void	ft_free_ui(t_world *w)

@@ -6,7 +6,7 @@
 /*   By: ataboada <ataboada@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/11 16:32:13 by ataboada          #+#    #+#             */
-/*   Updated: 2024/06/16 12:08:21 by ataboada         ###   ########.fr       */
+/*   Updated: 2024/06/17 17:46:37 by ataboada         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,6 @@ void	ft_load_xpm(t_canvas scene, t_image img_ptr, void *mlx_ptr)
 	int			y;
 	int			*color;
 
-	(void)mlx_ptr;
 	color = (int *)mlx_get_data_addr(img_ptr.img, &img_ptr.bpp,
 			&img_ptr.line_length, &img_ptr.endian);
 	y = -1;

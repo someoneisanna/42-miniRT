@@ -6,7 +6,7 @@
 /*   By: ataboada <ataboada@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/29 11:43:20 by ataboada          #+#    #+#             */
-/*   Updated: 2024/06/07 15:25:53 by ataboada         ###   ########.fr       */
+/*   Updated: 2024/06/17 17:51:47 by ataboada         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,20 +71,13 @@ void	ft_set_element_arrays(t_world *w)
 void	ft_set_n_buttons(t_world *w)
 {
 	int	counter;
+	int	index;
 
 	counter = 3;
-	if (w->ui.n_objs[0] > 0)
-		counter += 1;
-	if (w->ui.n_objs[1] > 0)
-		counter += 1;
-	if (w->ui.n_objs[2] > 0)
-		counter += 1;
-	if (w->ui.n_objs[3] > 0)
-		counter += 1;
-	if (w->ui.n_objs[4] > 0)
-		counter += 1;
-	if (w->ui.n_objs[5] > 0)
-		counter += 1;
+	index = -1;
+	while (++index < 6)
+		if (w->ui.n_objs[index] > 0)
+			counter += 1;
 	w->ui.n_buttons = counter;
 }
 

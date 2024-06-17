@@ -6,7 +6,7 @@
 /*   By: ataboada <ataboada@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 15:46:03 by ataboada          #+#    #+#             */
-/*   Updated: 2024/06/07 15:47:57 by ataboada         ###   ########.fr       */
+/*   Updated: 2024/06/17 17:57:21 by ataboada         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,8 +66,8 @@ void	ft_mlx_string_put(t_world *w, t_range range, int color)
 	index = range.min;
 	while (++index < range.max)
 	{
-		mlx_string_put(w->mlx, w->win, w->ui.begin + GAP_RIGHT + index / 12
-			* 220, GAP_TOP + 350 + index % 12
-			* STR_GAP_UP, color, w->ui.keys[index]);
+		mlx_string_put(w->mlx, w->win, w->ui.begin + GAP_RIGHT + index
+			/ LINES_ROW * UI_WIDTH / 2, GAP_TOP + 2.2 * GAP_ROW
+			+ index % LINES_ROW * STR_GAP_UP, color, w->ui.keys[index]);
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: ataboada <ataboada@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 19:35:48 by ataboada          #+#    #+#             */
-/*   Updated: 2024/06/14 17:06:19 by ataboada         ###   ########.fr       */
+/*   Updated: 2024/06/17 17:48:28 by ataboada         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	ft_set_hooks(t_world *w)
 
 int	ft_button_press(int k, t_world *img)
 {
-	if (k == 0xff1b)
+	if (k == ESC)
 		ft_close(img);
 	else if (k == W || k == A || k == S || k == D || k == M || k == N
 		|| k == UP || k == DOWN || k == LEFT || k == RIGHT

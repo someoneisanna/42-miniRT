@@ -6,7 +6,7 @@
 /*   By: ataboada <ataboada@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/13 14:55:39 by ataboada          #+#    #+#             */
-/*   Updated: 2024/06/07 15:54:52 by ataboada         ###   ########.fr       */
+/*   Updated: 2024/06/17 17:56:41 by ataboada         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,21 +55,13 @@
 # define BTN_H				60
 # define GAP_ROW			150
 # define GAP_COL			100
-# define STR_W				25
-# define STR_H				105
 # define BTN_ROW			3
+# define LINES_ROW			12
 # define STR_GAP_UP			35
 # define GAP_RIGHT			20
 # define GAP_TOP			150
 # define HEADER_TOP			30
 # define HEADER_STR_GAP		12
-
-# define BACK_COLOR			0x008080
-# define BTN_COLOR			0xff0000
-# define STR_BTN_COLOR		0x000000
-# define MENU_COLOR			0xffff00
-# define HEADER_COLOR		0xff00ff
-# define STR_SELECT			0x0000ff
 
 # define UI_THEME			0b1
 # define UI_CAMERA			0b10

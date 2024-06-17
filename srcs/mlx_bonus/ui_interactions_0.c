@@ -6,7 +6,7 @@
 /*   By: ataboada <ataboada@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 15:35:54 by ataboada          #+#    #+#             */
-/*   Updated: 2024/06/13 15:45:09 by ataboada         ###   ########.fr       */
+/*   Updated: 2024/06/17 17:54:32 by ataboada         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,6 @@ int	ft_within_limits(t_world *w, int x, int y)
 {
 	int		index;
 
-	index = -1;
 	index = -1;
 	while (++index < w->ui.n_buttons)
 	{
