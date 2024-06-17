@@ -6,7 +6,7 @@
 /*   By: ataboada <ataboada@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 21:35:51 by ataboada          #+#    #+#             */
-/*   Updated: 2024/06/06 15:39:06 by ataboada         ###   ########.fr       */
+/*   Updated: 2024/06/17 21:57:31 by ataboada         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,8 +83,7 @@ double	ft_get_double(t_world *w, t_shapes *s, char **line, char d)
 	{
 		if (**line == '.')
 			dot++;
-		if ((!ft_isdigit(**line) && **line != '.' && **line != ' ')
-			|| dot > 1 || i > 30)
+		if ((!ft_isdigit(**line) && **line != '.') || dot > 1 || i > 30)
 			ft_perror(w, s, "Double is not valid");
 		else if (**line != ' ')
 			str[++i] = **line;
