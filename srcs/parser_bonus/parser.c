@@ -6,7 +6,7 @@
 /*   By: ataboada <ataboada@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 21:32:00 by ataboada          #+#    #+#             */
-/*   Updated: 2024/06/13 13:59:03 by ataboada         ###   ########.fr       */
+/*   Updated: 2024/06/18 12:18:27 by ataboada         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@ void	ft_parser(char *filename, t_world *w)
 	count = 0;
 	if (ft_strncmp(filename + ft_strlen(filename) - 3, ".rt", 3))
 		ft_perror(w, NULL, "Invalid file extension");
+	if (ft_strlen(filename) < 4 || *(filename + ft_strlen(filename) - 4) == '/')
+		ft_perror(w, NULL, "Invalid file name");
 	fd = open(filename, O_RDONLY);
 	if (fd < 0)
 		ft_perror(w, NULL, NULL);

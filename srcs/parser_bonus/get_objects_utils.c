@@ -6,7 +6,7 @@
 /*   By: ataboada <ataboada@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/21 11:56:01 by ataboada          #+#    #+#             */
-/*   Updated: 2024/06/16 17:38:57 by ataboada         ###   ########.fr       */
+/*   Updated: 2024/06/18 12:23:16 by ataboada         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,11 +98,13 @@ char	*ft_get_xpm(t_world *w, t_shapes *s, char **line)
 	while ((*line)[i] != '"')
 		i++;
 	f = ft_substr(*line, 0, i);
-	if (ft_strlen(f) < 5 || ft_strncmp(f + ft_strlen(f) - 4, ".xpm", 4))
+	if (ft_strlen(f) < 4 || ft_strncmp(f + ft_strlen(f) - 4, ".xpm", 4))
 	{
 		free(f);
 		ft_perror(w, s, "Invalid texture file extension");
 	}
+	if (ft_strlen(f) < 5 || *(f + ft_strlen(f) - 5) == '/')
+		ft_perror(w, s, "Invalid file name");
 	*line += i + 1;
 	return (f);
 }

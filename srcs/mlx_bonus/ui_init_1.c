@@ -6,7 +6,7 @@
 /*   By: ataboada <ataboada@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 15:19:55 by ataboada          #+#    #+#             */
-/*   Updated: 2024/06/17 17:53:48 by ataboada         ###   ########.fr       */
+/*   Updated: 2024/06/18 11:00:59 by ataboada         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,15 +60,15 @@ void	ft_set_themes(t_world *w)
 	w->ui.themes[0][0] = 0x008080;
 	w->ui.themes[0][1] = 0xff0000;
 	w->ui.themes[0][2] = 0x000000;
-	w->ui.themes[0][3] = 0xffff00;
-	w->ui.themes[0][4] = 0xff00ff;
+	w->ui.themes[0][3] = 0xffffff;
+	w->ui.themes[0][4] = 0x153394;
 	w->ui.themes[0][5] = 0x0000ff;
-	w->ui.themes[1][0] = 0xcae7f5;
-	w->ui.themes[1][1] = 0xfff000;
-	w->ui.themes[1][2] = 0x0cf5aa;
-	w->ui.themes[1][3] = 0xffa705;
-	w->ui.themes[1][4] = 0x0c5ef5;
-	w->ui.themes[1][5] = 0x0cf1f5;
+	w->ui.themes[1][0] = 0x153394;
+	w->ui.themes[1][1] = 0x008080;
+	w->ui.themes[1][2] = 0x0000ff;
+	w->ui.themes[1][3] = 0xff0000;
+	w->ui.themes[1][4] = 0xffffff;
+	w->ui.themes[1][5] = 0xffffff;
 	index = -1;
 	while (++index < 6)
 		w->ui.theme[index] = w->ui.themes[0][index];
