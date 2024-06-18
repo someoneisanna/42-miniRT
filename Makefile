@@ -113,7 +113,9 @@ $(M_NAME): $(M_OBJS)
 $(OBJS_DIR):
 	@$(MKDIR_P) $(OBJS_DIR)
 
-bonus: $(B_OBJS)
+bonus: $(B_NAME)
+
+$(B_NAME) : $(B_OBJS)
 	@printf "$(PURPLE) Compiling Libft\n$(RESET)"
 	@$(MAKE) $(LIBFT_DIR)
 	@printf "$(GREEN) Libft has been compiled\n"
