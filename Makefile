@@ -152,11 +152,11 @@ download:
 	tar -xf minilibx-linux.tgz && rm -rf minilibx-linux.tgz
 
 mgmon: all
-	./$(M_NAME) scenes/ab_mandatory.rt
+	./$(M_NAME) scenes/mandatory/cylinders.rt
 	gprof $(M_NAME) gmon.out > analysis.txt
 
 bgmon: bonus
-	./$(B_NAME) scenes/ab_lights.rt
+	./$(B_NAME) scenes/bonus/all.rt
 	gprof $(B_NAME) gmon.out > analysis.txt
 
 valgrind: bonus
