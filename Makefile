@@ -12,7 +12,7 @@ B_NAME		= miniRT_bonus
 
 CC			= cc
 
-CFLAGS		= -Werror -Wextra -Wall -O3 -pthread -g #-pg
+CFLAGS		= -Werror -Wextra -Wall -O3 -pthread -g -Ofast -march=native -flto -fno-signed-zeros -funroll-loops -ffast-math -g
 MLX_FLAGS	= -Lminilibx-linux -lmlx -L/usr/lib/X11 -lXext -lX11 -lm
 
 RM			= rm -rf
@@ -148,7 +148,7 @@ re_bonus: fclean bonus
 # --------------------------------- ADDITIONAL ---------------------------------
 
 download:
-	wget https://cdn.intra.42.fr/document/document/22621/minilibx-linux.tgz && \
+	wget https://cdn.intra.42.fr/document/document/31373/minilibx-linux.tgz && \
 	tar -xf minilibx-linux.tgz && rm -rf minilibx-linux.tgz
 
 mgmon: all
